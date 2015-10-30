@@ -1,0 +1,634 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2110346B1B98C18400B2522B /* MagnetMax.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 211034691B98C18400B2522B /* MagnetMax.xcdatamodeld */; };
+		2110346E1B99167500B2522B /* MagnetMax.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = 211034691B98C18400B2522B /* MagnetMax.xcdatamodeld */; };
+		2123800C1BDAF4F9005498A2 /* ATDelayCondition.m in Sources */ = {isa = PBXBuildFile; fileRef = 2123800B1BDAF4F9005498A2 /* ATDelayCondition.m */; };
+		21403E741BE326A500F24AC0 /* QualityOfServiceSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21403E731BE326A500F24AC0 /* QualityOfServiceSpec.swift */; };
+		21403E771BE3358400F24AC0 /* ATDateType.m in Sources */ = {isa = PBXBuildFile; fileRef = 21403E761BE3358400F24AC0 /* ATDateType.m */; };
+		21403E791BE33B6C00F24AC0 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21403E781BE33B6C00F24AC0 /* Utilities.swift */; };
+		21752B171BC46B6D001D204F /* MMXModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 21752B161BC46B6D001D204F /* MMXModule.m */; };
+		21779C991BDC2C6300C0C7FF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2103C3CE1BDC2A90005EADE0 /* CoreData.framework */; };
+		21953B171BC3881B002647E4 /* MMModuleSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21953B161BC3881B002647E4 /* MMModuleSpec.swift */; };
+		21953B191BC38851002647E4 /* MMX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21953B181BC38851002647E4 /* MMX.swift */; };
+		219D63421BB5F2DD00BC35C0 /* ATDictionaryConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 219D63411BB5F2DD00BC35C0 /* ATDictionaryConfiguration.m */; };
+		21C3D92A1BD6DFE100A645D3 /* DelayCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C3D9291BD6DFE100A645D3 /* DelayCondition.swift */; };
+		21C3D92D1BD711B100A645D3 /* MMReachabilityConditionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C3D92C1BD711B100A645D3 /* MMReachabilityConditionSpec.swift */; };
+		21EC98771B8D43AC005D1C84 /* ATPrimitiveTypeServiceSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EC983E1B8D43AC005D1C84 /* ATPrimitiveTypeServiceSpec.m */; };
+		21EC987D1B8D43AC005D1C84 /* ATBodyStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EC98481B8D43AC005D1C84 /* ATBodyStyle.m */; };
+		21EC987E1B8D43AC005D1C84 /* ATDepartment.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EC984A1B8D43AC005D1C84 /* ATDepartment.m */; };
+		21EC987F1B8D43AC005D1C84 /* ATDrivetrain.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EC984C1B8D43AC005D1C84 /* ATDrivetrain.m */; };
+		21EC98801B8D43AC005D1C84 /* ATEnumAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EC984E1B8D43AC005D1C84 /* ATEnumAttribute.m */; };
+		21EC98811B8D43AC005D1C84 /* Deep Thought.cer in Resources */ = {isa = PBXBuildFile; fileRef = 21EC984F1B8D43AC005D1C84 /* Deep Thought.cer */; };
+		21EC98821B8D43AC005D1C84 /* ATGHIssueState.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EC98531B8D43AC005D1C84 /* ATGHIssueState.m */; };
+		21EC98831B8D43AC005D1C84 /* ATGHIssue.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EC98561B8D43AC005D1C84 /* ATGHIssue.m */; };
+		21EC98841B8D43AC005D1C84 /* ATGHUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EC98581B8D43AC005D1C84 /* ATGHUser.m */; };
+		21EC98861B8D43AC005D1C84 /* ATGitHubService.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EC985C1B8D43AC005D1C84 /* ATGitHubService.m */; };
+		21EC98871B8D43AC005D1C84 /* ATServiceAdapterHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EC985F1B8D43AC005D1C84 /* ATServiceAdapterHelper.m */; };
+		21EC98881B8D43AC005D1C84 /* keys.json in Resources */ = {isa = PBXBuildFile; fileRef = 21EC98601B8D43AC005D1C84 /* keys.json */; };
+		21EC988A1B8D43AC005D1C84 /* LoggingConfigurations.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21EC98631B8D43AC005D1C84 /* LoggingConfigurations.plist */; };
+		21EC988B1B8D43AC005D1C84 /* MathSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EC98651B8D43AC005D1C84 /* MathSpec.swift */; };
+		21EC988C1B8D43AC005D1C84 /* MMEndPointSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EC98661B8D43AC005D1C84 /* MMEndPointSpec.m */; };
+		21EC988D1B8D43AC005D1C84 /* MMServiceAdapterSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EC98671B8D43AC005D1C84 /* MMServiceAdapterSpec.m */; };
+		21EC988E1B8D43AC005D1C84 /* MMServiceSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EC98681B8D43AC005D1C84 /* MMServiceSpec.m */; };
+		21EC988F1B8D43AC005D1C84 /* MMValueTransformerSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EC98691B8D43AC005D1C84 /* MMValueTransformerSpec.m */; };
+		21EC98901B8D43AC005D1C84 /* ATModelWithAllTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EC986C1B8D43AC005D1C84 /* ATModelWithAllTypes.m */; };
+		21EC98911B8D43AC005D1C84 /* ATSubModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EC986E1B8D43AC005D1C84 /* ATSubModel.m */; };
+		21EC98921B8D43AC005D1C84 /* server.cer in Resources */ = {isa = PBXBuildFile; fileRef = 21EC986F1B8D43AC005D1C84 /* server.cer */; };
+		21EC98941B8D43AC005D1C84 /* ATPrimitiveTypeService.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EC98741B8D43AC005D1C84 /* ATPrimitiveTypeService.m */; };
+		5DA7EB2E53EB63943A533737 /* Pods_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D7A2B43053DF20E30A333D5 /* Pods_ios.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1B48D78DED2B8D3441DC6F58 /* Pods-ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios.release.xcconfig"; path = "Pods/Target Support Files/Pods-ios/Pods-ios.release.xcconfig"; sourceTree = "<group>"; };
+		2103C3CE1BDC2A90005EADE0 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		2110346A1B98C18400B2522B /* MagnetMax.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MagnetMax.xcdatamodel; sourceTree = "<group>"; };
+		2123800A1BDAF4F9005498A2 /* ATDelayCondition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATDelayCondition.h; sourceTree = "<group>"; };
+		2123800B1BDAF4F9005498A2 /* ATDelayCondition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATDelayCondition.m; sourceTree = "<group>"; };
+		21403E731BE326A500F24AC0 /* QualityOfServiceSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QualityOfServiceSpec.swift; sourceTree = "<group>"; };
+		21403E751BE3358400F24AC0 /* ATDateType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATDateType.h; sourceTree = "<group>"; };
+		21403E761BE3358400F24AC0 /* ATDateType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATDateType.m; sourceTree = "<group>"; };
+		21403E781BE33B6C00F24AC0 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		21752B151BC46B6D001D204F /* MMXModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMXModule.h; sourceTree = "<group>"; };
+		21752B161BC46B6D001D204F /* MMXModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMXModule.m; sourceTree = "<group>"; };
+		21953B161BC3881B002647E4 /* MMModuleSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMModuleSpec.swift; sourceTree = "<group>"; };
+		21953B181BC38851002647E4 /* MMX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMX.swift; sourceTree = "<group>"; };
+		219D63401BB5F2DD00BC35C0 /* ATDictionaryConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATDictionaryConfiguration.h; sourceTree = "<group>"; };
+		219D63411BB5F2DD00BC35C0 /* ATDictionaryConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATDictionaryConfiguration.m; sourceTree = "<group>"; };
+		21C3D9291BD6DFE100A645D3 /* DelayCondition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DelayCondition.swift; sourceTree = "<group>"; };
+		21C3D92C1BD711B100A645D3 /* MMReachabilityConditionSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMReachabilityConditionSpec.swift; sourceTree = "<group>"; };
+		21EC982A1B8D384C005D1C84 /* iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		21EC982F1B8D384C005D1C84 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = "iOS Tests/Info.plist"; sourceTree = "<group>"; };
+		21EC983B1B8D43AC005D1C84 /* ATGitHubServiceSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATGitHubServiceSpec.m; sourceTree = "<group>"; };
+		21EC983E1B8D43AC005D1C84 /* ATPrimitiveTypeServiceSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATPrimitiveTypeServiceSpec.m; sourceTree = "<group>"; };
+		21EC98471B8D43AC005D1C84 /* ATBodyStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATBodyStyle.h; sourceTree = "<group>"; };
+		21EC98481B8D43AC005D1C84 /* ATBodyStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATBodyStyle.m; sourceTree = "<group>"; };
+		21EC98491B8D43AC005D1C84 /* ATDepartment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATDepartment.h; sourceTree = "<group>"; };
+		21EC984A1B8D43AC005D1C84 /* ATDepartment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATDepartment.m; sourceTree = "<group>"; };
+		21EC984B1B8D43AC005D1C84 /* ATDrivetrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATDrivetrain.h; sourceTree = "<group>"; };
+		21EC984C1B8D43AC005D1C84 /* ATDrivetrain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATDrivetrain.m; sourceTree = "<group>"; };
+		21EC984D1B8D43AC005D1C84 /* ATEnumAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATEnumAttribute.h; sourceTree = "<group>"; };
+		21EC984E1B8D43AC005D1C84 /* ATEnumAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATEnumAttribute.m; sourceTree = "<group>"; };
+		21EC984F1B8D43AC005D1C84 /* Deep Thought.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Deep Thought.cer"; sourceTree = "<group>"; };
+		21EC98521B8D43AC005D1C84 /* ATGHIssueState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATGHIssueState.h; sourceTree = "<group>"; };
+		21EC98531B8D43AC005D1C84 /* ATGHIssueState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATGHIssueState.m; sourceTree = "<group>"; };
+		21EC98551B8D43AC005D1C84 /* ATGHIssue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATGHIssue.h; sourceTree = "<group>"; };
+		21EC98561B8D43AC005D1C84 /* ATGHIssue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATGHIssue.m; sourceTree = "<group>"; };
+		21EC98571B8D43AC005D1C84 /* ATGHUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATGHUser.h; sourceTree = "<group>"; };
+		21EC98581B8D43AC005D1C84 /* ATGHUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATGHUser.m; sourceTree = "<group>"; };
+		21EC98591B8D43AC005D1C84 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		21EC985B1B8D43AC005D1C84 /* ATGitHubService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATGitHubService.h; sourceTree = "<group>"; };
+		21EC985C1B8D43AC005D1C84 /* ATGitHubService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATGitHubService.m; sourceTree = "<group>"; };
+		21EC985E1B8D43AC005D1C84 /* ATServiceAdapterHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATServiceAdapterHelper.h; sourceTree = "<group>"; };
+		21EC985F1B8D43AC005D1C84 /* ATServiceAdapterHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATServiceAdapterHelper.m; sourceTree = "<group>"; };
+		21EC98601B8D43AC005D1C84 /* keys.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = keys.json; sourceTree = "<group>"; };
+		21EC98631B8D43AC005D1C84 /* LoggingConfigurations.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = LoggingConfigurations.plist; sourceTree = "<group>"; };
+		21EC98641B8D43AC005D1C84 /* MagnetMaxTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MagnetMaxTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		21EC98651B8D43AC005D1C84 /* MathSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MathSpec.swift; sourceTree = "<group>"; };
+		21EC98661B8D43AC005D1C84 /* MMEndPointSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMEndPointSpec.m; sourceTree = "<group>"; };
+		21EC98671B8D43AC005D1C84 /* MMServiceAdapterSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMServiceAdapterSpec.m; sourceTree = "<group>"; };
+		21EC98681B8D43AC005D1C84 /* MMServiceSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMServiceSpec.m; sourceTree = "<group>"; };
+		21EC98691B8D43AC005D1C84 /* MMValueTransformerSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMValueTransformerSpec.m; sourceTree = "<group>"; };
+		21EC986B1B8D43AC005D1C84 /* ATModelWithAllTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATModelWithAllTypes.h; sourceTree = "<group>"; };
+		21EC986C1B8D43AC005D1C84 /* ATModelWithAllTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATModelWithAllTypes.m; sourceTree = "<group>"; };
+		21EC986D1B8D43AC005D1C84 /* ATSubModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSubModel.h; sourceTree = "<group>"; };
+		21EC986E1B8D43AC005D1C84 /* ATSubModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATSubModel.m; sourceTree = "<group>"; };
+		21EC986F1B8D43AC005D1C84 /* server.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = server.cer; sourceTree = "<group>"; };
+		21EC98731B8D43AC005D1C84 /* ATPrimitiveTypeService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATPrimitiveTypeService.h; sourceTree = "<group>"; };
+		21EC98741B8D43AC005D1C84 /* ATPrimitiveTypeService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATPrimitiveTypeService.m; sourceTree = "<group>"; };
+		4D7A2B43053DF20E30A333D5 /* Pods_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A410EDD847BE58812423D97C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		EDBDAD73471A544B6BAC908E /* Pods-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ios/Pods-ios.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		21EC98271B8D384C005D1C84 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				21779C991BDC2C6300C0C7FF /* CoreData.framework in Frameworks */,
+				5DA7EB2E53EB63943A533737 /* Pods_ios.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		21C3D9281BD6DFD100A645D3 /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+				21C3D9291BD6DFE100A645D3 /* DelayCondition.swift */,
+				2123800A1BDAF4F9005498A2 /* ATDelayCondition.h */,
+				2123800B1BDAF4F9005498A2 /* ATDelayCondition.m */,
+			);
+			path = Operations;
+			sourceTree = "<group>";
+		};
+		21EC98081B8D384B005D1C84 = {
+			isa = PBXGroup;
+			children = (
+				21EC983A1B8D43AC005D1C84 /* Tests */,
+				21EC982D1B8D384C005D1C84 /* iOS Tests */,
+				21EC98121B8D384B005D1C84 /* Products */,
+				465D1116DCBADB30A074ED50 /* Pods */,
+				CA16A9D37FCEFC26C4F21503 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		21EC98121B8D384B005D1C84 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				21EC982A1B8D384C005D1C84 /* iOS Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		21EC982D1B8D384C005D1C84 /* iOS Tests */ = {
+			isa = PBXGroup;
+			children = (
+				21EC982E1B8D384C005D1C84 /* Supporting Files */,
+			);
+			name = "iOS Tests";
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		21EC982E1B8D384C005D1C84 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				21EC982F1B8D384C005D1C84 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		21EC983A1B8D43AC005D1C84 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				21C3D9281BD6DFD100A645D3 /* Operations */,
+				21EC983B1B8D43AC005D1C84 /* ATGitHubServiceSpec.m */,
+				21EC983E1B8D43AC005D1C84 /* ATPrimitiveTypeServiceSpec.m */,
+				21EC98461B8D43AC005D1C84 /* CommonTypes */,
+				21EC984F1B8D43AC005D1C84 /* Deep Thought.cer */,
+				21EC98501B8D43AC005D1C84 /* GitHub */,
+				21EC985D1B8D43AC005D1C84 /* Helpers */,
+				21EC98611B8D43AC005D1C84 /* Logging */,
+				21EC98631B8D43AC005D1C84 /* LoggingConfigurations.plist */,
+				21EC98641B8D43AC005D1C84 /* MagnetMaxTests-Bridging-Header.h */,
+				21EC98651B8D43AC005D1C84 /* MathSpec.swift */,
+				21EC98661B8D43AC005D1C84 /* MMEndPointSpec.m */,
+				21EC98671B8D43AC005D1C84 /* MMServiceAdapterSpec.m */,
+				21EC98681B8D43AC005D1C84 /* MMServiceSpec.m */,
+				21EC98691B8D43AC005D1C84 /* MMValueTransformerSpec.m */,
+				21EC986A1B8D43AC005D1C84 /* Models */,
+				21EC986F1B8D43AC005D1C84 /* server.cer */,
+				21EC98701B8D43AC005D1C84 /* Services */,
+				211034691B98C18400B2522B /* MagnetMax.xcdatamodeld */,
+				219D63401BB5F2DD00BC35C0 /* ATDictionaryConfiguration.h */,
+				219D63411BB5F2DD00BC35C0 /* ATDictionaryConfiguration.m */,
+				21953B161BC3881B002647E4 /* MMModuleSpec.swift */,
+				21953B181BC38851002647E4 /* MMX.swift */,
+				21752B151BC46B6D001D204F /* MMXModule.h */,
+				21752B161BC46B6D001D204F /* MMXModule.m */,
+				21C3D92C1BD711B100A645D3 /* MMReachabilityConditionSpec.swift */,
+				21403E731BE326A500F24AC0 /* QualityOfServiceSpec.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		21EC98461B8D43AC005D1C84 /* CommonTypes */ = {
+			isa = PBXGroup;
+			children = (
+				21EC98471B8D43AC005D1C84 /* ATBodyStyle.h */,
+				21EC98481B8D43AC005D1C84 /* ATBodyStyle.m */,
+				21EC98491B8D43AC005D1C84 /* ATDepartment.h */,
+				21EC984A1B8D43AC005D1C84 /* ATDepartment.m */,
+				21EC984B1B8D43AC005D1C84 /* ATDrivetrain.h */,
+				21EC984C1B8D43AC005D1C84 /* ATDrivetrain.m */,
+				21EC984D1B8D43AC005D1C84 /* ATEnumAttribute.h */,
+				21EC984E1B8D43AC005D1C84 /* ATEnumAttribute.m */,
+			);
+			path = CommonTypes;
+			sourceTree = "<group>";
+		};
+		21EC98501B8D43AC005D1C84 /* GitHub */ = {
+			isa = PBXGroup;
+			children = (
+				21EC98511B8D43AC005D1C84 /* CommonTypes */,
+				21EC98541B8D43AC005D1C84 /* Models */,
+				21EC98591B8D43AC005D1C84 /* README.md */,
+				21EC985A1B8D43AC005D1C84 /* Services */,
+			);
+			path = GitHub;
+			sourceTree = "<group>";
+		};
+		21EC98511B8D43AC005D1C84 /* CommonTypes */ = {
+			isa = PBXGroup;
+			children = (
+				21EC98521B8D43AC005D1C84 /* ATGHIssueState.h */,
+				21EC98531B8D43AC005D1C84 /* ATGHIssueState.m */,
+			);
+			path = CommonTypes;
+			sourceTree = "<group>";
+		};
+		21EC98541B8D43AC005D1C84 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				21EC98551B8D43AC005D1C84 /* ATGHIssue.h */,
+				21EC98561B8D43AC005D1C84 /* ATGHIssue.m */,
+				21EC98571B8D43AC005D1C84 /* ATGHUser.h */,
+				21EC98581B8D43AC005D1C84 /* ATGHUser.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		21EC985A1B8D43AC005D1C84 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				21EC985B1B8D43AC005D1C84 /* ATGitHubService.h */,
+				21EC985C1B8D43AC005D1C84 /* ATGitHubService.m */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		21EC985D1B8D43AC005D1C84 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				21EC985E1B8D43AC005D1C84 /* ATServiceAdapterHelper.h */,
+				21EC985F1B8D43AC005D1C84 /* ATServiceAdapterHelper.m */,
+				21EC98601B8D43AC005D1C84 /* keys.json */,
+				21403E781BE33B6C00F24AC0 /* Utilities.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		21EC98611B8D43AC005D1C84 /* Logging */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Logging;
+			sourceTree = "<group>";
+		};
+		21EC986A1B8D43AC005D1C84 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				21EC986B1B8D43AC005D1C84 /* ATModelWithAllTypes.h */,
+				21EC986C1B8D43AC005D1C84 /* ATModelWithAllTypes.m */,
+				21EC986D1B8D43AC005D1C84 /* ATSubModel.h */,
+				21EC986E1B8D43AC005D1C84 /* ATSubModel.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		21EC98701B8D43AC005D1C84 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				21403E751BE3358400F24AC0 /* ATDateType.h */,
+				21403E761BE3358400F24AC0 /* ATDateType.m */,
+				21EC98731B8D43AC005D1C84 /* ATPrimitiveTypeService.h */,
+				21EC98741B8D43AC005D1C84 /* ATPrimitiveTypeService.m */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		465D1116DCBADB30A074ED50 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				EDBDAD73471A544B6BAC908E /* Pods-ios.debug.xcconfig */,
+				1B48D78DED2B8D3441DC6F58 /* Pods-ios.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		CA16A9D37FCEFC26C4F21503 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2103C3CE1BDC2A90005EADE0 /* CoreData.framework */,
+				4D7A2B43053DF20E30A333D5 /* Pods_ios.framework */,
+				A410EDD847BE58812423D97C /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		21EC98291B8D384C005D1C84 /* iOS Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 21EC98371B8D384C005D1C84 /* Build configuration list for PBXNativeTarget "iOS Tests" */;
+			buildPhases = (
+				02155755F0D644808B1293CC /* Check Pods Manifest.lock */,
+				21EC98261B8D384C005D1C84 /* Sources */,
+				21EC98271B8D384C005D1C84 /* Frameworks */,
+				21EC98281B8D384C005D1C84 /* Resources */,
+				7B0B2FC66B4B6C610564C10B /* Copy Pods Resources */,
+				65F300A7C46C4125246238A6 /* Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "iOS Tests";
+			productName = "iOS Tests";
+			productReference = 21EC982A1B8D384C005D1C84 /* iOS Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		21EC98091B8D384B005D1C84 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = "Magnet Systems, Inc.";
+				TargetAttributes = {
+					21EC98291B8D384C005D1C84 = {
+						CreatedOnToolsVersion = 6.4;
+					};
+				};
+			};
+			buildConfigurationList = 21EC980C1B8D384B005D1C84 /* Build configuration list for PBXProject "MagnetMax Tests" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 21EC98081B8D384B005D1C84;
+			productRefGroup = 21EC98121B8D384B005D1C84 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				21EC98291B8D384C005D1C84 /* iOS Tests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		21EC98281B8D384C005D1C84 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2110346E1B99167500B2522B /* MagnetMax.xcdatamodeld in Resources */,
+				21EC98811B8D43AC005D1C84 /* Deep Thought.cer in Resources */,
+				21EC98921B8D43AC005D1C84 /* server.cer in Resources */,
+				21EC988A1B8D43AC005D1C84 /* LoggingConfigurations.plist in Resources */,
+				21EC98881B8D43AC005D1C84 /* keys.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		02155755F0D644808B1293CC /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		65F300A7C46C4125246238A6 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ios/Pods-ios-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7B0B2FC66B4B6C610564C10B /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ios/Pods-ios-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		21EC98261B8D384C005D1C84 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				21EC988F1B8D43AC005D1C84 /* MMValueTransformerSpec.m in Sources */,
+				21EC987E1B8D43AC005D1C84 /* ATDepartment.m in Sources */,
+				219D63421BB5F2DD00BC35C0 /* ATDictionaryConfiguration.m in Sources */,
+				21C3D92D1BD711B100A645D3 /* MMReachabilityConditionSpec.swift in Sources */,
+				21EC98831B8D43AC005D1C84 /* ATGHIssue.m in Sources */,
+				21EC98871B8D43AC005D1C84 /* ATServiceAdapterHelper.m in Sources */,
+				21EC98901B8D43AC005D1C84 /* ATModelWithAllTypes.m in Sources */,
+				21752B171BC46B6D001D204F /* MMXModule.m in Sources */,
+				21403E771BE3358400F24AC0 /* ATDateType.m in Sources */,
+				21953B171BC3881B002647E4 /* MMModuleSpec.swift in Sources */,
+				21C3D92A1BD6DFE100A645D3 /* DelayCondition.swift in Sources */,
+				21EC98911B8D43AC005D1C84 /* ATSubModel.m in Sources */,
+				21EC98821B8D43AC005D1C84 /* ATGHIssueState.m in Sources */,
+				21403E791BE33B6C00F24AC0 /* Utilities.swift in Sources */,
+				21EC987F1B8D43AC005D1C84 /* ATDrivetrain.m in Sources */,
+				21953B191BC38851002647E4 /* MMX.swift in Sources */,
+				2110346B1B98C18400B2522B /* MagnetMax.xcdatamodeld in Sources */,
+				21EC98941B8D43AC005D1C84 /* ATPrimitiveTypeService.m in Sources */,
+				21EC987D1B8D43AC005D1C84 /* ATBodyStyle.m in Sources */,
+				2123800C1BDAF4F9005498A2 /* ATDelayCondition.m in Sources */,
+				21EC98801B8D43AC005D1C84 /* ATEnumAttribute.m in Sources */,
+				21EC988E1B8D43AC005D1C84 /* MMServiceSpec.m in Sources */,
+				21403E741BE326A500F24AC0 /* QualityOfServiceSpec.swift in Sources */,
+				21EC988C1B8D43AC005D1C84 /* MMEndPointSpec.m in Sources */,
+				21EC98861B8D43AC005D1C84 /* ATGitHubService.m in Sources */,
+				21EC98841B8D43AC005D1C84 /* ATGHUser.m in Sources */,
+				21EC988B1B8D43AC005D1C84 /* MathSpec.swift in Sources */,
+				21EC988D1B8D43AC005D1C84 /* MMServiceAdapterSpec.m in Sources */,
+				21EC98771B8D43AC005D1C84 /* ATPrimitiveTypeServiceSpec.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		21EC98321B8D384C005D1C84 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		21EC98331B8D384C005D1C84 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		21EC98381B8D384C005D1C84 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EDBDAD73471A544B6BAC908E /* Pods-ios.debug.xcconfig */;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				HEADER_SEARCH_PATHS = (
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Private/MagnetMaxCore\"",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "iOS Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.magnet.iOS.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/MagnetMaxTests-Bridging-Header.h";
+			};
+			name = Debug;
+		};
+		21EC98391B8D384C005D1C84 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1B48D78DED2B8D3441DC6F58 /* Pods-ios.release.xcconfig */;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				HEADER_SEARCH_PATHS = (
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Private/MagnetMaxCore\"",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "iOS Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.magnet.iOS.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/MagnetMaxTests-Bridging-Header.h";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		21EC980C1B8D384B005D1C84 /* Build configuration list for PBXProject "MagnetMax Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				21EC98321B8D384C005D1C84 /* Debug */,
+				21EC98331B8D384C005D1C84 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		21EC98371B8D384C005D1C84 /* Build configuration list for PBXNativeTarget "iOS Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				21EC98381B8D384C005D1C84 /* Debug */,
+				21EC98391B8D384C005D1C84 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		211034691B98C18400B2522B /* MagnetMax.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				2110346A1B98C18400B2522B /* MagnetMax.xcdatamodel */,
+			);
+			currentVersion = 2110346A1B98C18400B2522B /* MagnetMax.xcdatamodel */;
+			path = MagnetMax.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 21EC98091B8D384B005D1C84 /* Project object */;
+}
