@@ -25,6 +25,8 @@
 #import <AFNetworking/AFURLResponseSerialization.h>
 #import <MagnetMaxCore/MagnetMaxCore-Swift.h>
 
+NSString * const MMApplicationDidReceiveAuthenticationChallengeNotification = @"com.magnet.authentication.challenge.receive";
+
 @implementation MMService
 
 + (NSDictionary *)metaData {

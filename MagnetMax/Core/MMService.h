@@ -24,4 +24,9 @@
 
 + (NSDictionary *)metaData;
 
+/**
+ * Posted when an OAuth Login Exception is received.
+ */
+extern NSString *const MMApplicationDidReceiveAuthenticationChallengeNotification;
+
 @end
