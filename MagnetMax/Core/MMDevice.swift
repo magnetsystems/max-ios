@@ -49,7 +49,9 @@ public extension MMDevice {
     // MARK: - Private methods
     static private func deviceToken(data: NSData) -> String {
         
-        return data.description.stringByReplacingOccurrencesOfString(" ", withString: "").stringByReplacingOccurrencesOfString("<", withString: "").stringByReplacingOccurrencesOfString(">", withString: "")
+        return String(data.description.characters.filter {
+            [" ", "<", ">"].contains($0) != true
+            })
     }
 }
 
