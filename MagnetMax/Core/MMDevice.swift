@@ -46,10 +46,11 @@ public extension MMDevice {
         return MMCoreConfiguration.serviceAdapter.currentDevice
     }
     
-    // MARK: - Private methods
-    static private func deviceToken(data: NSData) -> String {
-        
-        return data.description.stringByReplacingOccurrencesOfString(" ", withString: "").stringByReplacingOccurrencesOfString("<", withString: "").stringByReplacingOccurrencesOfString(">", withString: "")
-    }
+	// MARK: - Private methods
+	static private func deviceToken(data: NSData) -> String {
+		return String(data.description.characters.filter {
+			[" ", "<", ">"].contains($0) != true
+			})
+	}
 }
 
