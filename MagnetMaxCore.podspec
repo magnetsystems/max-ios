@@ -20,8 +20,10 @@ Pod::Spec.new do |s|
   s.frameworks     =  'Foundation', 'UIKit', 'CFNetwork' , 'Security', 'CoreData', 'SystemConfiguration'
   s.xcconfig       =  { 'OTHER_LDFLAGS' => '-ObjC -all_load', 'ENABLE_BITCODE'=>'NO' }
 
-  s.dependency 'AFNetworking/NSURLConnection', '~> 2.0'
-  s.dependency 'AFNetworking/NSURLSession', '~> 2.0'
+  # s.dependency 'AFNetworking/NSURLConnection', '~> 2.0'
+  s.dependency 'AFNetworking/NSURLConnection', '2.6.1'
+  # s.dependency 'AFNetworking/NSURLSession', '~> 2.0'
+  s.dependency 'AFNetworking/NSURLSession', '2.6.1'
   s.dependency 'CocoaLumberjack', '~> 2.2'
   # s.dependency 'Mantle', '~> 2.0'
   s.dependency 'Mantle', '2.0.6'
