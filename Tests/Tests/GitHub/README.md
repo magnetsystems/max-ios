@@ -1,0 +1,1 @@
+This is an example of how the SDK can be used to connect to 3rd party REST APIs directly if we ever wanted to.

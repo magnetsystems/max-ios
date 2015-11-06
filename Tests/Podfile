@@ -1,0 +1,35 @@
+source 'https://github.com/CocoaPods/Specs'
+source 'https://github.com/magnetsystems/Specs'
+
+xcodeproj 'MagnetMax Tests'
+workspace '../MagnetMax'
+inhibit_all_warnings!
+
+def import_pods
+  use_frameworks!
+#  pod 'Quick', '0.3.1'
+#  pod 'Nimble'
+  pod 'Quick', '~> 0.6.0'
+  pod 'Nimble', '2.0.0-rc.3'
+  pod 'Kiwi', '~> 2.3'
+  pod 'MagnetMaxCore', :path => '../'
+  pod 'MagnetMax', :path => '../'
+end
+
+target :ios do
+  platform :ios, '8.0'
+  link_with 'iOS Tests'
+  import_pods
+end
+
+# target :osx do
+#   platform :osx, '10.9'
+#   link_with 'OS X Tests'
+#   import_pods
+# end
+
+# https://github.com/CocoaPods/CocoaPods/issues/4420#issuecomment-150834796
+post_install do |installer|
+  `find Pods -regex 'Pods\\/Quick\\/Quick\\/Quick\\.h' -print0 | xargs -0 sed -i '' 's/\\(<\\)Quick\\/\\(.*\\)\\(>\\)/\\"\\2\\"/'`
+  `find Pods -regex 'Pods\\/Nimble\\/Nimble\\/Nimble\\.h' -print0 | xargs -0 sed -i '' 's/\\(<\\)Nimble\\/\\(.*\\)\\(>\\)/\\"\\2\\"/'`
+end
