@@ -52,48 +52,11 @@ The timeout interval, in seconds, for created requests. The default timeout inte
 
 @end
 
-@protocol MMRequestFacade <NSObject>
-
-@required
-
-- (void)addValue:(NSString *)value forHTTPHeaderField:(NSString *)field;
-
-- (void)addValue:(NSString *)value forPathParameterField:(NSString *)field;
-
-- (void)addEncodedValue:(NSString *)value forPathParameterField:(NSString *)field;
-
-- (void)addValue:(NSString *)value forQueryParameterField:(NSString *)field;
-
-- (void)addEncodedValue:(NSString *)value forQueryParameterField:(NSString *)field;
-
-@end
-
-@protocol MMProfilerConfiguration <NSObject>
-
-@property(nonatomic, strong) id beforeCallData;
-
-@property(nonatomic, copy) void (^completion)(id requestInfo, long elapsedTime, int statusCode, id beforeCallData);
-
-@end
-
-@interface MMProfiler : NSObject <MMProfilerConfiguration>
-
-+ (instancetype)profiler;
-
-+ (instancetype)profilerWithBeforeCallData:(id)data
-                                completion:(void (^)(id requestInfo, long elapsedTime, int statusCode, id beforeCallData))completion;
-
-@end
-
 @interface MMServiceAdapter : NSObject
 
 @property(nonatomic, strong) MMEndPoint *endPoint;
 
 @property(nonatomic, copy) NSString *HATToken;
-
-@property(nonatomic, copy) void (^requestInterceptor)(id<MMRequestFacade> request);
-
-@property(nonatomic, strong) id<MMProfilerConfiguration> profiler;
 
 @property(nonatomic, strong) id<MMClientFacade> client;
 
