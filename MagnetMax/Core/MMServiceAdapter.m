@@ -484,9 +484,8 @@ NSString *const kMMDeviceUUIDKey = @"kMMDeviceUUIDKey";
 
     
     MMCall *call = [[MMCall alloc] init];
-    call.name = [NSString stringWithFormat:@"%@ %@", MMStringFromRequestMethod(method.requestMethod), method.path];
+    call.callId = correlationId;
     call.underlyingOperation = operation;
-    [call addDependency:self.CATTokenOperation];
     
     return call;
 }
