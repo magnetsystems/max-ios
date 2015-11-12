@@ -23,7 +23,7 @@
 #import "MMRequestOperationManager.h"
 #import "MMModel.h"
 #import <AFNetworking/AFURLResponseSerialization.h>
-#import <MagnetMaxCore/MagnetMaxCore-Swift.h>
+#import "MMCall_Private.h"
 
 NSString * const MMApplicationDidReceiveAuthenticationChallengeNotification = @"com.magnet.application.authentication.challenge.receive";
 NSString * const MMUserDidReceiveAuthenticationChallengeNotification = @"com.magnet.user.authentication.challenge.receive";
@@ -71,11 +71,17 @@ NSString * const MMUserDidReceiveAuthenticationChallengeNotification = @"com.mag
         id successBlock = [success copy];
         FailureBlock failureBlock = [failure copy];
         
+        MMCall *call = [[MMCall alloc] init];
+        call.name = [NSString stringWithFormat:@"%@ %@", MMStringFromRequestMethod(method.requestMethod), method.path];
+        call.invocation = anInvocation;
+        call.serviceMethod = method;
+        call.serviceAdapter = self.serviceAdapter;
         NSString *correlationId = [[NSUUID UUID] UUIDString];
-        MMCall *call = [[MMCall alloc] initWithCallID:correlationId serviceAdapter:self.serviceAdapter serviceMethod:method request:request successBlock:successBlock failureBlock:failureBlock];
+        call.callId = correlationId;
         [call addDependency:self.serviceAdapter.CATTokenOperation];
         [anInvocation retainArguments];
         [anInvocation setReturnValue:&call];
+
     }
 }
 

@@ -29,7 +29,7 @@
 #import "MMUserService.h"
 #import "MMUserInfoService.h"
 #import <AFNetworking/AFHTTPSessionManager.h>
-#import <MagnetMaxCore/MagnetMaxCore-Swift.h>
+#import "MMCall_Private.h"
 
 @interface MMRequestFacadeImpl : NSObject<MMRequestFacade>
 
@@ -483,9 +483,11 @@ NSString *const kMMDeviceUUIDKey = @"kMMDeviceUUIDKey";
     MMServiceMethod *method = metaData[selectorString];
 
     
-    NSMutableURLRequest *unusedRequest = [[NSMutableURLRequest alloc] init];
-    MMCall *call = [[MMCall alloc] initWithCallID:correlationId serviceAdapter:self serviceMethod:method request:unusedRequest underlyingOperation:operation];
-
+    MMCall *call = [[MMCall alloc] init];
+    call.name = [NSString stringWithFormat:@"%@ %@", MMStringFromRequestMethod(method.requestMethod), method.path];
+    call.underlyingOperation = operation;
+    [call addDependency:self.CATTokenOperation];
+    
     return call;
 }
 
