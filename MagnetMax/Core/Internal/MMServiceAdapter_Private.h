@@ -45,10 +45,9 @@ typedef NS_ENUM(NSUInteger, MMCATTokenRequestStatus){
 @property(nonatomic, copy) NSString *clientSecret;
 @property(nonatomic, copy) NSString *CATToken;
 //@property(nonatomic, copy) NSString *HATToken;
-@property(nonatomic, copy) NSString *mmxAppId;
 @property(nonatomic, copy) NSString *username;
 @property(nonatomic, copy) NSMutableDictionary *services;
-@property(nonatomic, strong) NSOperation *CATTokenOperation;
+@property(nonatomic, strong) Operation *CATTokenOperation;
 
 @property(nonatomic, readwrite) MMDevice *currentDevice;
 

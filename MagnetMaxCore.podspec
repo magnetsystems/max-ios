@@ -1,11 +1,12 @@
 Pod::Spec.new do |s|
   s.name               =  'MagnetMaxCore'
-  s.version            =  '2.0.0'
+  s.version            =  '2.1.0'
   s.license            =  { :type => 'Apache 2.0' }
   s.summary            =  'The core of Magnet Max.'
   s.homepage           =  'https://www.magnet.com/magnet-max/'
   s.author             =  { 'Magnet Systems, Inc.' => 'info@magnet.com' }
-  s.source             =  { :git => 'https://github.com/magnetsystems/max-ios.git', :tag => "tag-release-#{s.version}" }
+  # s.source             =  { :git => 'https://github.com/magnetsystems/max-ios.git', :tag => "tag-release-#{s.version}" }
+  s.source             =  { :git => 'https://github.com/magnetsystems/max-ios.git', :branch => "develop" }
 
   s.platform = :ios
   s.ios.deployment_target = '8.0'

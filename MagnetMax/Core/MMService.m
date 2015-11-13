@@ -78,7 +78,9 @@ NSString * const MMUserDidReceiveAuthenticationChallengeNotification = @"com.mag
         call.serviceAdapter = self.serviceAdapter;
         NSString *correlationId = [[NSUUID UUID] UUIDString];
         call.callId = correlationId;
-        [call addDependency:self.serviceAdapter.CATTokenOperation];
+        if (self.serviceAdapter.CATTokenOperation) {
+            [call addDependency:self.serviceAdapter.CATTokenOperation];
+        }
         [anInvocation retainArguments];
         [anInvocation setReturnValue:&call];
 
