@@ -478,12 +478,13 @@ NSString *const kMMDeviceUUIDKey = @"kMMDeviceUUIDKey";
                                                                         }];
 
     NSString *correlationId = [[NSUUID UUID] UUIDString];
-    NSDictionary *metaData = [[MMUserService class] metaData];
-    NSString *selectorString = NSStringFromSelector(@selector(login:username:password:client_id:scope:remember_me:mMSDEVICEID:authorization:success:failure:));
-    MMServiceMethod *method = metaData[selectorString];
-
+//    NSDictionary *metaData = [[MMUserService class] metaData];
+//    NSString *selectorString = NSStringFromSelector(@selector(login:username:password:client_id:scope:remember_me:mMSDEVICEID:authorization:success:failure:));
+//    MMServiceMethod *method = metaData[selectorString];
+    
     
     MMCall *call = [[MMCall alloc] init];
+    call.serviceAdapter = self;
     call.callId = correlationId;
     call.underlyingOperation = operation;
     
