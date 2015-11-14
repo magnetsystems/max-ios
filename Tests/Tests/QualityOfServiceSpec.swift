@@ -27,6 +27,11 @@ class QualityOfServiceSpec : QuickSpec {
         let cacheOptions = MMCacheOptions(maxCacheAge: 86400, alwaysUseCacheIfOffline: true)
         
         describe("Caching") {
+            
+            beforeSuite {
+                NSURLCache.sharedURLCache().removeAllCachedResponses()
+            }
+            
             xit("should fail for POST requests") {
                 let service = ATPrimitiveTypeService()
                 expect {
