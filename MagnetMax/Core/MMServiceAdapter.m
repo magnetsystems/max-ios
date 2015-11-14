@@ -243,18 +243,6 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 - (void)authorizeApplicationWithSuccess:(void (^)(AFOAuthCredential *credential))success
 								failure:(void (^)(NSError *error))failure {
 	
-    self.authManager = [[AFOAuth2Manager alloc] initWithBaseURL:self.endPoint.URL
-                                                       clientID:self.clientID/*kClientID*/
-                                                         secret:self.clientSecret/*kClientSecret*/];
-    
-    [self.authManager.requestSerializer setValue:[MMServiceAdapter deviceUUID] forHTTPHeaderField:@"MMS-DEVICE-ID"];
-    [self.authManager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wnonnull"
-    self.authManager.operationQueue = nil;
-#pragma clang diagnostic pop
-	
 	AFHTTPRequestOperation *afOperation = [self.authManager authenticateUsingOAuthWithURLString:@"com.magnet.server/applications/session" scope:@"APPLICATION" success:nil failure:nil];
 	
 //	// Create a NSOperationQueue here
@@ -504,6 +492,24 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 }
 
 #pragma mark - Overriden getters
+
+- (AFOAuth2Manager *)authManager {
+    if (!_authManager) {
+        _authManager = [[AFOAuth2Manager alloc] initWithBaseURL:self.endPoint.URL
+                                                       clientID:self.clientID/*kClientID*/
+                                                         secret:self.clientSecret/*kClientSecret*/];
+        
+        [_authManager.requestSerializer setValue:[MMServiceAdapter deviceUUID] forHTTPHeaderField:@"MMS-DEVICE-ID"];
+        [_authManager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+        
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
+        _authManager.operationQueue = nil;
+#pragma clang diagnostic pop
+    }
+    
+    return _authManager;
+}
 
 - (id<MMRequestOperationManager>)requestOperationManager {
     if (!_requestOperationManager) {
