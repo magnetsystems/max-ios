@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "group:MagnetMax"
+      name = "MagnetMax">
+      <Group
+         location = "group:Core"
+         name = "Core">
+         <Group
+            location = "group:CoreData"
+            name = "CoreData">
+            <FileRef
+               location = "group:MagnetMax.xcdatamodeld">
+            </FileRef>
+            <FileRef
+               location = "group:MMCoreDataStack.swift">
+            </FileRef>
+            <FileRef
+               location = "group:MMManagedObject.swift">
+            </FileRef>
+            <FileRef
+               location = "group:MMManagedObjectContextSettable.swift">
+            </FileRef>
+            <FileRef
+               location = "group:MMManagedObjectType.swift">
+            </FileRef>
+            <FileRef
+               location = "group:MMReliableCall.swift">
+            </FileRef>
+            <FileRef
+               location = "group:NSManagedObjectContext+Extensions.swift">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:Internal"
+            name = "Internal">
+            <Group
+               location = "group:Logging"
+               name = "Logging">
+               <Group
+                  location = "group:Remote"
+                  name = "Remote">
+                  <FileRef
+                     location = "group:DDLogFileManagerDefaultWIthRemote.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:DDLogFileManagerDefaultWIthRemote.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:MMLogEventFormatter.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:MMLogEventFormatter.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:MMLogEventsCollectionService.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:MMLogEventsCollectionService.m">
+                  </FileRef>
+               </Group>
+            </Group>
+            <FileRef
+               location = "group:MMConfigurationReader.h">
+            </FileRef>
+            <FileRef
+               location = "group:MMConfigurationReader.m">
+            </FileRef>
+            <FileRef
+               location = "group:MMRestHandler.h">
+            </FileRef>
+            <FileRef
+               location = "group:MMRestHandler.m">
+            </FileRef>
+            <FileRef
+               location = "group:MMService_Private.h">
+            </FileRef>
+            <FileRef
+               location = "group:MMServiceAdapter_Private.h">
+            </FileRef>
+            <FileRef
+               location = "group:MMUtilities.h">
+            </FileRef>
+            <FileRef
+               location = "group:MMUtilities.m">
+            </FileRef>
+         </Group>
+         <FileRef
+            location = "group:MagnetMaxCore.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMAsynchronousOperation.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMAsynchronousOperation.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMCacheOptions.swift">
+         </FileRef>
+         <FileRef
+            location = "group:MMCall.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMCall.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMCall_Private.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMClientApplication.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMClientApplication.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMClientRegistrationRequest.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMClientRegistrationRequest.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMConfiguration.swift">
+         </FileRef>
+         <FileRef
+            location = "group:MMCoreConfiguration.swift">
+         </FileRef>
+         <FileRef
+            location = "group:MMData.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMData.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMDevice.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMDevice.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMDevice.swift">
+         </FileRef>
+         <FileRef
+            location = "group:MMDeviceService.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMDeviceService.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMDeviceStatus.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMDeviceStatus.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMEndPoint.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMEndPoint.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMEnumAttributeContainer.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMHTTPRequestOperationManager.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMHTTPRequestOperationManager.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMHTTPUtilities.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMHTTPUtilities.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMLogEvent.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMLogEvent.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMLogger.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMLogger.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMModel.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMModel.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMModule.swift">
+         </FileRef>
+         <FileRef
+            location = "group:MMOAuthViewController.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMOAuthViewController.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMOsType.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMOsType.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMPasswordResetMethod.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMPasswordResetMethod.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMPasswordResetRequest.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMPasswordResetRequest.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMPropertyListConfiguration.swift">
+         </FileRef>
+         <FileRef
+            location = "group:MMPushAuthorityType.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMPushAuthorityType.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMReliableCallOptions.swift">
+         </FileRef>
+         <FileRef
+            location = "group:MMRequestOperationManager.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMService.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMService.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMServiceAdapter.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMServiceAdapter.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMServiceIOType.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMServiceMethod.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMServiceMethod.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMServiceMethodParameter.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMServiceMethodParameter.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMServiceMethodParameterType.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMTimeUnit.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMTimeUnit.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMURLProtocol.swift">
+         </FileRef>
+         <FileRef
+            location = "group:MMUser.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMUser.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMUser.swift">
+         </FileRef>
+         <FileRef
+            location = "group:MMUserInfoService.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMUserInfoService.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMUserRealm.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMUserRealm.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMUserService.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMUserService.m">
+         </FileRef>
+         <FileRef
+            location = "group:MMValueTransformer.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMValueTransformer.m">
+         </FileRef>
+         <FileRef
+            location = "group:NSURLSessionConfiguration+URLProtocol.swift">
+         </FileRef>
+         <Group
+            location = "group:Operations"
+            name = "Operations">
+            <FileRef
+               location = "group:BlockObserver.swift">
+            </FileRef>
+            <FileRef
+               location = "group:BlockOperation.swift">
+            </FileRef>
+            <FileRef
+               location = "group:DelayOperation.swift">
+            </FileRef>
+            <FileRef
+               location = "group:Dictionary+Operations.swift">
+            </FileRef>
+            <FileRef
+               location = "group:ExclusivityController.swift">
+            </FileRef>
+            <FileRef
+               location = "group:GroupOperation.swift">
+            </FileRef>
+            <FileRef
+               location = "group:MMCall.swift">
+            </FileRef>
+            <FileRef
+               location = "group:MMCondition.swift">
+            </FileRef>
+            <FileRef
+               location = "group:MMReachabilityCondition.swift">
+            </FileRef>
+            <FileRef
+               location = "group:MMURLSessionDataTaskOperation.h">
+            </FileRef>
+            <FileRef
+               location = "group:MMURLSessionDataTaskOperation.m">
+            </FileRef>
+            <FileRef
+               location = "group:MutuallyExclusive.swift">
+            </FileRef>
+            <FileRef
+               location = "group:NegatedCondition.swift">
+            </FileRef>
+            <FileRef
+               location = "group:NoCancelledDependencies.swift">
+            </FileRef>
+            <FileRef
+               location = "group:NSLock+Operations.swift">
+            </FileRef>
+            <FileRef
+               location = "group:NSOperation+Operations.swift">
+            </FileRef>
+            <FileRef
+               location = "group:Operation.swift">
+            </FileRef>
+            <FileRef
+               location = "group:OperationCondition.swift">
+            </FileRef>
+            <FileRef
+               location = "group:OperationErrors.swift">
+            </FileRef>
+            <FileRef
+               location = "group:OperationObserver.swift">
+            </FileRef>
+            <FileRef
+               location = "group:OperationQueue.swift">
+            </FileRef>
+            <FileRef
+               location = "group:ReachabilityCondition.swift">
+            </FileRef>
+            <FileRef
+               location = "group:SilentCondition.swift">
+            </FileRef>
+            <FileRef
+               location = "group:TimeoutObserver.swift">
+            </FileRef>
+            <FileRef
+               location = "group:URLSessionTaskOperation.swift">
+            </FileRef>
+         </Group>
+      </Group>
+      <FileRef
+         location = "group:MagnetMax.h">
+      </FileRef>
+      <FileRef
+         location = "group:MagnetMax.swift">
+      </FileRef>
+   </Group>
+   <FileRef
+      location = "group:Tests/MagnetMax Tests.xcodeproj">
+   </FileRef>
+</Workspace>
