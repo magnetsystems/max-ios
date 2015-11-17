@@ -31,6 +31,7 @@
 #import <MagnetMaxCore/MagnetMaxCore-Swift.h>
 #import "MMCall_Private.h"
 #import "MMConfigurationReader.h"
+#import "MMRefreshTokenRequest.h"
 
 
 NSString * const MMServiceAdapterDidReceiveConfigurationNotification = @"com.magnet.networking.configuration.receive";
@@ -269,30 +270,55 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 - (void)authenticateUserWithSuccess:(void (^)())success
                             failure:(void (^)(NSError *error))failure {
     NSString *refreshToken = [AFOAuthCredential retrieveCredentialWithIdentifier:MMHATTokenIdentifier].refreshToken;
-    NSDictionary * params = @{@"grant_type":@"refresh_token",
-                              @"client_id":self.clientID,
-                              @"scope":@"user",
-                              @"refresh_token": refreshToken,
-                              @"device_id":[MMServiceAdapter deviceUUID],
-                              };
-    NSOperation *operation = [self.authManager authenticateUsingOAuthWithURLString:@"com.magnet.server/user/newtoken" parameters:params
-                                                                           success:^(AFOAuthCredential *credential) {
-                                                                               [AFOAuthCredential storeCredential:credential withIdentifier:MMHATTokenIdentifier];
-                                                                               
-//                                                                               self.username = username;
-                                                                               self.HATToken = credential.accessToken;
-                                                                               [self registerCurrentDeviceWithSuccess:nil failure:nil];
-                                                                               //                                                                            if (self.HATToken) {
-                                                                               //                                                                                [self passUserTokenToRegisteredServices];
-                                                                               //                                                                            }
-                                                                               if (success) {
-                                                                                   success();
-                                                                               }
-                                                                           } failure:^(NSError *error) {
-                                                                               if (failure) {
-                                                                                   failure(error);
-                                                                               }
-                                                                           }];
+    MMRefreshTokenRequest *refreshTokenRequest = [[MMRefreshTokenRequest alloc] init];
+    refreshTokenRequest.grant_type = @"refresh_token";
+    refreshTokenRequest.client_id = self.clientID;
+    refreshTokenRequest.scope = @"user";
+    refreshTokenRequest.refresh_token = refreshToken;
+    refreshTokenRequest.device_id = [MMServiceAdapter deviceUUID];
+    
+    MMCall *operation = [self.userService renewAccessToken:refreshTokenRequest success:^(NSString *response) {
+        NSLog(@"response = %@", response);
+        NSError *jsonError;
+        NSData *responseData = [response dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:responseData
+                                                                           options:NSJSONReadingMutableContainers
+                                                                             error:&jsonError];
+        self.HATToken = responseDictionary[@"access_token"];
+        [self registerCurrentDeviceWithSuccess:nil failure:nil];
+        if (success) {
+            success();
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+    
+//    NSDictionary * params = @{@"grant_type":@"refresh_token",
+//                              @"client_id":self.clientID,
+//                              @"scope":@"user",
+//                              @"refresh_token": refreshToken,
+//                              @"device_id":[MMServiceAdapter deviceUUID],
+//                              };
+//    NSOperation *operation = [self.authManager authenticateUsingOAuthWithURLString:@"com.magnet.server/user/newtoken" parameters:params
+//                                                                           success:^(AFOAuthCredential *credential) {
+//                                                                               [AFOAuthCredential storeCredential:credential withIdentifier:MMHATTokenIdentifier];
+//                                                                               
+////                                                                               self.username = username;
+//                                                                               self.HATToken = credential.accessToken;
+//                                                                               [self registerCurrentDeviceWithSuccess:nil failure:nil];
+//                                                                               //                                                                            if (self.HATToken) {
+//                                                                               //                                                                                [self passUserTokenToRegisteredServices];
+//                                                                               //                                                                            }
+//                                                                               if (success) {
+//                                                                                   success();
+//                                                                               }
+//                                                                           } failure:^(NSError *error) {
+//                                                                               if (failure) {
+//                                                                                   failure(error);
+//                                                                               }
+//                                                                           }];
     [self.requestOperationManager.operationQueue addOperation:operation];
 }
 

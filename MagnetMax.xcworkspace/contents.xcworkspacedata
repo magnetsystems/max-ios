@@ -35,6 +35,12 @@
          <Group
             location = "group:Internal"
             name = "Internal">
+            <FileRef
+               location = "group:MMRefreshTokenRequest.h">
+            </FileRef>
+            <FileRef
+               location = "group:MMRefreshTokenRequest.m">
+            </FileRef>
             <Group
                location = "group:Logging"
                name = "Logging">
