@@ -23,7 +23,7 @@
 @class MMCall;
 @class MMDevice;
 @protocol MMConfiguration;
-@class AFHTTPSessionManager;
+@class MMHTTPSessionManager;
 @protocol MMRequestOperationManager;
 
 @protocol MMClientFacade <NSObject>
@@ -56,13 +56,15 @@ The timeout interval, in seconds, for created requests. The default timeout inte
 
 @property(nonatomic, strong) MMEndPoint *endPoint;
 
+@property(nonatomic, copy) NSString *CATToken;
+
 @property(nonatomic, copy) NSString *HATToken;
 
 @property(nonatomic, strong) id<MMClientFacade> client;
 
 @property(nonatomic, readonly) MMDevice *currentDevice;
 
-@property (nonatomic, strong) AFHTTPSessionManager *sessionManager;
+@property (nonatomic, strong) MMHTTPSessionManager *sessionManager;
 
 @property(nonatomic, strong) id<MMRequestOperationManager> requestOperationManager;
 
@@ -94,7 +96,8 @@ The timeout interval, in seconds, for created requests. The default timeout inte
 
 - (MMCall *)loginWithUsername:(NSString *)username
                      password:(NSString *)password
-                      success:(void (^)(BOOL success))success
+                   rememberMe:(BOOL)rememberMe
+                      success:(void (^)(BOOL successful))success
                       failure:(void (^)(NSError *error))failure;
 
 - (MMCall *)logoutWithSuccess:(void (^)(BOOL response))success
@@ -109,6 +112,12 @@ The timeout interval, in seconds, for created requests. The default timeout inte
 - (void)resendReliableCalls;
 
 - (void)cancelAllOperations;
+
+- (void)authenticateApplicationWithSuccess:(void (^)())success
+                                   failure:(void (^)(NSError *error))failure;
+
+- (void)authenticateUserWithSuccess:(void (^)())success
+                            failure:(void (^)(NSError *error))failure;
 
 /**
  * Posted when (additional) configuration is received.

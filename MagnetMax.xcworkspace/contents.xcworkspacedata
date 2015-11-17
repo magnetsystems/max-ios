@@ -387,6 +387,9 @@
                location = "group:URLSessionTaskOperation.swift">
             </FileRef>
          </Group>
+         <FileRef
+            location = "group:MMHTTPSessionManager.swift">
+         </FileRef>
       </Group>
       <FileRef
          location = "group:MagnetMax.h">
@@ -397,5 +400,8 @@
    </Group>
    <FileRef
       location = "group:Tests/MagnetMax Tests.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Tests/Pods/Pods.xcodeproj">
    </FileRef>
 </Workspace>

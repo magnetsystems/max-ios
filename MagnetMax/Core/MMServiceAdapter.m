@@ -28,7 +28,7 @@
 #import "MMUser.h"
 #import "MMUserService.h"
 #import "MMUserInfoService.h"
-#import <AFNetworking/AFHTTPSessionManager.h>
+#import <MagnetMaxCore/MagnetMaxCore-Swift.h>
 #import "MMCall_Private.h"
 #import "MMConfigurationReader.h"
 
@@ -42,6 +42,7 @@ NSString * const MMServiceAdapterDidReceiveAuthenticationChallengeNotification =
 NSString * const MMServiceAdapterDidReceiveAuthenticationChallengeURLKey = @"com.magnet.networking.challenge.receive.url";
 
 NSString * const MMCATTokenIdentifier = @"com.magnet.networking.cattoken";
+NSString * const MMHATTokenIdentifier = @"com.magnet.networking.hattoken";
 
 NSString *const kMMDeviceUUIDKey = @"kMMDeviceUUIDKey";
 NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
@@ -77,7 +78,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 
 + (instancetype)adapter {
     MMServiceAdapter *adapter = [[self alloc] init];
-    [[NSNotificationCenter defaultCenter] addObserver:adapter selector:@selector(networkingTaskDidComplete:) name:AFNetworkingTaskDidCompleteNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:adapter selector:@selector(networkingTaskDidComplete:) name:AFNetworkingTaskDidCompleteNotification object:nil];
     return adapter;
 }
 
@@ -171,7 +172,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     [configuration registerURLProtocolClass:[MMURLProtocol class]];
-    AFHTTPSessionManager *sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:endpoint.URL sessionConfiguration:configuration];
+    MMHTTPSessionManager *sessionManager = [[MMHTTPSessionManager alloc] initWithBaseURL:endpoint.URL sessionConfiguration:configuration serviceAdapter: serviceAdapter];
     sessionManager.responseSerializer = [AFHTTPResponseSerializer serializer];
     if (serviceAdapter.client.securityPolicy) {
         sessionManager.securityPolicy = serviceAdapter.client.securityPolicy;
@@ -186,8 +187,9 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
     }
     
     AFOAuthCredential *savedCATToken = [AFOAuthCredential retrieveCredentialWithIdentifier:MMCATTokenIdentifier];
+    AFOAuthCredential *savedHATToken = [AFOAuthCredential retrieveCredentialWithIdentifier:MMHATTokenIdentifier];
     
-    if (!savedCATToken || savedCATToken.isExpired) {
+    if ((!savedCATToken || savedCATToken.isExpired)) {
         [serviceAdapter authorizeApplicationWithSuccess:^(AFOAuthCredential *credential) {
             [AFOAuthCredential storeCredential:credential withIdentifier:MMCATTokenIdentifier];
         } failure:^(NSError *error) {
@@ -209,9 +211,18 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidReceiveConfigurationNotification object:self userInfo:configuration];
+                if (savedHATToken && !savedHATToken.isExpired) {
+                    serviceAdapter.HATToken = savedHATToken.accessToken;
+//                    [serviceAdapter passUserTokenToRegisteredServices];
+                }
             } failure:^(NSError *error) {
                 NSDictionary *configuration = [[NSUserDefaults standardUserDefaults] dictionaryForKey:kMMConfigurationKey];
+
                 [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidReceiveConfigurationNotification object:self userInfo:configuration];
+                if (savedHATToken && !savedHATToken.isExpired) {
+                    serviceAdapter.HATToken = savedHATToken.accessToken;
+//                    [serviceAdapter passUserTokenToRegisteredServices];
+                }
             }];
             // We want this operation to finish before anything else.
             serviceAdapter.CATTokenOperation = call;
@@ -238,6 +249,51 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
     }];
 
     [call executeInBackground:nil];
+}
+
+- (void)authenticateApplicationWithSuccess:(void (^)())success
+                                   failure:(void (^)(NSError *error))failure {
+    [self authorizeApplicationWithSuccess:^(AFOAuthCredential *credential) {
+        [AFOAuthCredential storeCredential:credential withIdentifier:MMCATTokenIdentifier];
+        if (success) {
+            success();
+        }
+    } failure:^(NSError *error) {
+        [AFOAuthCredential deleteCredentialWithIdentifier:MMCATTokenIdentifier];
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+
+- (void)authenticateUserWithSuccess:(void (^)())success
+                            failure:(void (^)(NSError *error))failure {
+    NSString *refreshToken = [AFOAuthCredential retrieveCredentialWithIdentifier:MMHATTokenIdentifier].refreshToken;
+    NSDictionary * params = @{@"grant_type":@"refresh_token",
+                              @"client_id":self.clientID,
+                              @"scope":@"user",
+                              @"refresh_token": refreshToken,
+                              @"device_id":[MMServiceAdapter deviceUUID],
+                              };
+    NSOperation *operation = [self.authManager authenticateUsingOAuthWithURLString:@"com.magnet.server/user/newtoken" parameters:params
+                                                                           success:^(AFOAuthCredential *credential) {
+                                                                               [AFOAuthCredential storeCredential:credential withIdentifier:MMHATTokenIdentifier];
+                                                                               
+//                                                                               self.username = username;
+                                                                               self.HATToken = credential.accessToken;
+                                                                               [self registerCurrentDeviceWithSuccess:nil failure:nil];
+                                                                               //                                                                            if (self.HATToken) {
+                                                                               //                                                                                [self passUserTokenToRegisteredServices];
+                                                                               //                                                                            }
+                                                                               if (success) {
+                                                                                   success();
+                                                                               }
+                                                                           } failure:^(NSError *error) {
+                                                                               if (failure) {
+                                                                                   failure(error);
+                                                                               }
+                                                                           }];
+    [self.requestOperationManager.operationQueue addOperation:operation];
 }
 
 - (void)authorizeApplicationWithSuccess:(void (^)(AFOAuthCredential *credential))success
@@ -354,6 +410,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 //FIXME: loginWithUsername will NOT work over web sockets yet
 - (MMCall *)loginWithUsername:(NSString *)username
                      password:(NSString *)password
+                   rememberMe:(BOOL)rememberMe
                       success:(void (^)(BOOL successful))success
                       failure:(void (^)(NSError *error))failure {
 	
@@ -361,9 +418,14 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 							  @"username":username,
 							  @"password":password,
 							  @"client_id":self.clientID,
-							  @"scope":@"anonymous"};
+							  @"scope":@"anonymous",
+                              @"remember_me": rememberMe ? @"true": @"false"};
     NSOperation *operation = [self.authManager authenticateUsingOAuthWithURLString:@"com.magnet.server/user/session" parameters:params
                                                                         success:^(AFOAuthCredential *credential) {
+                                                                            if (rememberMe) {
+                                                                                [AFOAuthCredential storeCredential:credential withIdentifier:MMHATTokenIdentifier];
+                                                                            }
+                                                                            
                                                                             self.username = username;
                                                                             self.HATToken = credential.accessToken;
                                                                             [self registerCurrentDeviceWithSuccess:nil failure:nil];
@@ -417,6 +479,9 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
             failure(error);
         }
     }];
+    
+    // Delete the HAT token
+    [AFOAuthCredential deleteCredentialWithIdentifier:MMHATTokenIdentifier];
 }
 
 - (MMCall *)getCurrentUserWithSuccess:(void (^)(MMUser *response))success

@@ -43,8 +43,6 @@ typedef NS_ENUM(NSUInteger, MMCATTokenRequestStatus){
 @property(nonatomic, strong) AFOAuth2Manager *authManager;
 @property(nonatomic, copy) NSString *clientID;
 @property(nonatomic, copy) NSString *clientSecret;
-@property(nonatomic, copy) NSString *CATToken;
-//@property(nonatomic, copy) NSString *HATToken;
 @property(nonatomic, copy) NSString *username;
 @property(nonatomic, copy) NSMutableDictionary *services;
 @property(nonatomic, strong) Operation *CATTokenOperation;

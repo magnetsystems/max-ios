@@ -23,8 +23,6 @@
 #import "MMValueTransformer.h"
 #import "MTLJSONAdapter.h"
 #import "MMRequestOperationManager.h"
-#import <AFNetworking/AFHTTPSessionManager.h>
-#import <MagnetMaxCore/MagnetMaxCore.h>
 
 @implementation MMCall
 
