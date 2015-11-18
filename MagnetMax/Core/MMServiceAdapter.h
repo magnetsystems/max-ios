@@ -56,6 +56,8 @@ The timeout interval, in seconds, for created requests. The default timeout inte
 
 @property(nonatomic, strong) MMEndPoint *endPoint;
 
+@property(nonatomic, readonly) NSString *refreshToken;
+
 @property(nonatomic, copy) NSString *CATToken;
 
 @property(nonatomic, copy) NSString *HATToken;

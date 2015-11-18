@@ -21,6 +21,7 @@ enum AuthenticationErrorType: String {
     case InvalidClientCredentials = "client_credentials"
     case ExpiredCATToken = "client_access_token"
     case ExpiredHATToken = "user_access_token"
+    case InvalidRefreshToken = "refresh_token" // Refresh token is (not valid|has expired|not valid for this device)
 }
 
 public class MMHTTPSessionManager: AFHTTPSessionManager {
@@ -67,14 +68,21 @@ public class MMHTTPSessionManager: AFHTTPSessionManager {
                             case .ExpiredHATToken:
 //                                print(request)
                                 // FIXME: If no refreshToken, return error
-                                self.serviceAdapter.authenticateUserWithSuccess({
-                                    let requestWithNewToken = request.mutableCopy() as! NSMutableURLRequest
-                                    requestWithNewToken.setValue(self.serviceAdapter.bearerAuthorization(), forHTTPHeaderField: "Authorization")
-                                    let originalTask = super.dataTaskWithRequest(requestWithNewToken, completionHandler: originalCompletionHandler)
-                                    originalTask.resume()
-                                }, failure: { error in
-                                    print(error)
-                                })
+                                if self.serviceAdapter.refreshToken != nil {
+                                    self.serviceAdapter.authenticateUserWithSuccess({
+                                        let requestWithNewToken = request.mutableCopy() as! NSMutableURLRequest
+                                        requestWithNewToken.setValue(self.serviceAdapter.bearerAuthorization(), forHTTPHeaderField: "Authorization")
+                                        let originalTask = super.dataTaskWithRequest(requestWithNewToken, completionHandler: originalCompletionHandler)
+                                        originalTask.resume()
+                                        }, failure: { error in
+                                            print(error)
+                                    })
+                                } else {
+                                    originalCompletionHandler?(response, responseObject, error)
+                                }
+                            case .InvalidRefreshToken:
+//                                print(request)
+                                originalCompletionHandler?(response, responseObject, error)
                             }
                         } else {
                             // TODO: Log error

@@ -212,17 +212,23 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidReceiveConfigurationNotification object:self userInfo:configuration];
-                if (savedHATToken && !savedHATToken.isExpired) {
-                    serviceAdapter.HATToken = savedHATToken.accessToken;
+                if (savedHATToken) {
+                    serviceAdapter.refreshToken = savedHATToken.refreshToken;
+                    if (!savedHATToken.isExpired) {
+                        serviceAdapter.HATToken = savedHATToken.accessToken;
+                    }
 //                    [serviceAdapter passUserTokenToRegisteredServices];
                 }
             } failure:^(NSError *error) {
                 NSDictionary *configuration = [[NSUserDefaults standardUserDefaults] dictionaryForKey:kMMConfigurationKey];
 
                 [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidReceiveConfigurationNotification object:self userInfo:configuration];
-                if (savedHATToken && !savedHATToken.isExpired) {
-                    serviceAdapter.HATToken = savedHATToken.accessToken;
-//                    [serviceAdapter passUserTokenToRegisteredServices];
+                if (savedHATToken) {
+                    serviceAdapter.refreshToken = savedHATToken.refreshToken;
+                    if (!savedHATToken.isExpired) {
+                        serviceAdapter.HATToken = savedHATToken.accessToken;
+                    }
+                    //                    [serviceAdapter passUserTokenToRegisteredServices];
                 }
             }];
             // We want this operation to finish before anything else.
@@ -278,7 +284,6 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
     refreshTokenRequest.device_id = [MMServiceAdapter deviceUUID];
     
     MMCall *operation = [self.userService renewAccessToken:refreshTokenRequest success:^(NSString *response) {
-        NSLog(@"response = %@", response);
         NSError *jsonError;
         NSData *responseData = [response dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:responseData
@@ -294,31 +299,6 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
             failure(error);
         }
     }];
-    
-//    NSDictionary * params = @{@"grant_type":@"refresh_token",
-//                              @"client_id":self.clientID,
-//                              @"scope":@"user",
-//                              @"refresh_token": refreshToken,
-//                              @"device_id":[MMServiceAdapter deviceUUID],
-//                              };
-//    NSOperation *operation = [self.authManager authenticateUsingOAuthWithURLString:@"com.magnet.server/user/newtoken" parameters:params
-//                                                                           success:^(AFOAuthCredential *credential) {
-//                                                                               [AFOAuthCredential storeCredential:credential withIdentifier:MMHATTokenIdentifier];
-//                                                                               
-////                                                                               self.username = username;
-//                                                                               self.HATToken = credential.accessToken;
-//                                                                               [self registerCurrentDeviceWithSuccess:nil failure:nil];
-//                                                                               //                                                                            if (self.HATToken) {
-//                                                                               //                                                                                [self passUserTokenToRegisteredServices];
-//                                                                               //                                                                            }
-//                                                                               if (success) {
-//                                                                                   success();
-//                                                                               }
-//                                                                           } failure:^(NSError *error) {
-//                                                                               if (failure) {
-//                                                                                   failure(error);
-//                                                                               }
-//                                                                           }];
     [self.requestOperationManager.operationQueue addOperation:operation];
 }
 
@@ -454,6 +434,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
                                                                             
                                                                             self.username = username;
                                                                             self.HATToken = credential.accessToken;
+                                                                            self.refreshToken = credential.refreshToken;
                                                                             [self registerCurrentDeviceWithSuccess:nil failure:nil];
 //                                                                            if (self.HATToken) {
 //                                                                                [self passUserTokenToRegisteredServices];
@@ -489,11 +470,15 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 //        NSLog(@"Failed to unregister device when logout");
     }];
     [call executeInBackground:nil];
+    
+    // Delete the HAT token
+    [AFOAuthCredential deleteCredentialWithIdentifier:MMHATTokenIdentifier];
 
     return [self.userService logoutWithSuccess:^(BOOL response) {
         if(success) {
             // Clean up
             self.HATToken = nil;
+            self.refreshToken = nil;
             [self invalidateUserTokenInRegisteredServices];
             self.username = nil;
             if (success) {
@@ -505,9 +490,6 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
             failure(error);
         }
     }];
-    
-    // Delete the HAT token
-    [AFOAuthCredential deleteCredentialWithIdentifier:MMHATTokenIdentifier];
 }
 
 - (MMCall *)getCurrentUserWithSuccess:(void (^)(MMUser *response))success
