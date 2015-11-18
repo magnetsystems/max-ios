@@ -475,17 +475,22 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
     [AFOAuthCredential deleteCredentialWithIdentifier:MMHATTokenIdentifier];
 
     return [self.userService logoutWithSuccess:^(BOOL response) {
-        if(success) {
-            // Clean up
-            self.HATToken = nil;
-            self.refreshToken = nil;
-            [self invalidateUserTokenInRegisteredServices];
-            self.username = nil;
-            if (success) {
-                success(response);
-            }
+        // Clean up
+        self.HATToken = nil;
+        self.refreshToken = nil;
+        [self invalidateUserTokenInRegisteredServices];
+        self.username = nil;
+        
+        if (success) {
+            success(response);
         }
     } failure:^(NSError *error) {
+        // Clean up
+        self.HATToken = nil;
+        self.refreshToken = nil;
+        [self invalidateUserTokenInRegisteredServices];
+        self.username = nil;
+        
         if(failure) {
             failure(error);
         }

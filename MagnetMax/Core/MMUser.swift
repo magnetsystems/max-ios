@@ -99,6 +99,12 @@ public extension MMUser {
     
     /**
         Logs out a currently logged-in user.
+    */
+    static public func logout() {
+        logout(nil, failure: nil)
+    }
+    /**
+        Logs out a currently logged-in user.
      
         - Parameters:
             - success: A block object to be executed when the logout finishes successfully. This block has no return value and takes no arguments.

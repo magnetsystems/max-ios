@@ -67,15 +67,14 @@ public class MMHTTPSessionManager: AFHTTPSessionManager {
                                 }
                             case .ExpiredHATToken:
 //                                print(request)
-                                // FIXME: If no refreshToken, return error
                                 if self.serviceAdapter.refreshToken != nil {
                                     self.serviceAdapter.authenticateUserWithSuccess({
                                         let requestWithNewToken = request.mutableCopy() as! NSMutableURLRequest
                                         requestWithNewToken.setValue(self.serviceAdapter.bearerAuthorization(), forHTTPHeaderField: "Authorization")
                                         let originalTask = super.dataTaskWithRequest(requestWithNewToken, completionHandler: originalCompletionHandler)
                                         originalTask.resume()
-                                        }, failure: { error in
-                                            print(error)
+                                    }, failure: { error in
+                                        print(error)
                                     })
                                 } else {
                                     originalCompletionHandler?(response, responseObject, error)
