@@ -24,8 +24,7 @@ import AFNetworking
     public private(set) var summary: String
     public private(set) var mimeType: String
     
-    internal init(attachmentID: String?, name: String, summary: String, mimeType: String) {
-        self.attachmentID = attachmentID
+    internal init(name: String, summary: String, mimeType: String) {
         self.name = name
         self.summary = summary
         self.mimeType = mimeType
@@ -36,10 +35,10 @@ import AFNetworking
     public private(set) var fileURL: NSURL
     public private(set) var fileName: String
     
-    init(attachmentID: String?, fileURL: NSURL, fileName: String, name: String, summary: String, mimeType: String) {
+    public init(fileURL: NSURL, fileName: String, name: String, summary: String, mimeType: String) {
         self.fileName = fileName
         self.fileURL = fileURL
-        super.init(attachmentID: attachmentID, name: name, summary: fileName, mimeType: mimeType)
+        super.init(name: name, summary: fileName, mimeType: mimeType)
     }
     
 }
@@ -48,17 +47,17 @@ import AFNetworking
     public private(set) var data: NSData
     public private(set) var fileName: String
     
-    init(attachmentID: String?, data: NSData, fileName: String, name: String, summary: String, mimeType: String) {
+    init(data: NSData, fileName: String, name: String, summary: String, mimeType: String) {
         self.data = data
         self.fileName = fileName
-        super.init(attachmentID: attachmentID, name: name, summary: fileName, mimeType: mimeType)
+        super.init(name: name, summary: fileName, mimeType: mimeType)
     }
     
 }
 
 @objc public class MMAttachmentService: NSObject {
-
-    public func upload(attachments: [MMAttachment], success: (() -> ())?, failure: ((error: NSError) -> Void)?) {
+    
+    static public func upload(attachments: [MMAttachment], success: (() -> ())?, failure: ((error: NSError) -> Void)?) {
         guard let uploadURL = NSURL(string: "com.magnet.server/file/save", relativeToURL: MMCoreConfiguration.serviceAdapter.endPoint.URL)?.absoluteString else {
             fatalError("uploadURL should not be nil")
         }
@@ -79,14 +78,19 @@ import AFNetworking
             if let e = error {
                 failure?(error: e)
             } else {
-                success?()
+                if let data = responseObject as? NSData {
+                    if let attachmentID = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
+                        attachments.first?.attachmentID = attachmentID
+                        success?()
+                    }
+                }
             }
         }
         uploadTask.resume()
     }
     
-    public func download(attachmentID: String, success: ((MMAttachment) -> ())?, failure: ((error: NSError) -> Void)?) {
-        guard let downloadURL = NSURL(string: "com.magnet.server/file/download\(attachmentID)", relativeToURL: MMCoreConfiguration.serviceAdapter.endPoint.URL) else {
+    static public func download(attachmentID: String, success: ((MMAttachment) -> ())?, failure: ((error: NSError) -> Void)?) {
+        guard let downloadURL = NSURL(string: "com.magnet.server/file/download/\(attachmentID)", relativeToURL: MMCoreConfiguration.serviceAdapter.endPoint.URL) else {
             fatalError("downloadURL should not be nil")
         }
         let request = NSMutableURLRequest(URL: downloadURL)
@@ -99,7 +103,7 @@ import AFNetworking
             if let e = error {
                 failure?(error: e)
             } else {
-                let fileAttachment = MMFileAttachment(attachmentID: attachmentID, fileURL: filePath!, fileName: "", name: "", summary: "", mimeType: "image/jpeg")
+                let fileAttachment = MMFileAttachment(fileURL: filePath!, fileName: "", name: "", summary: "", mimeType: "image/jpeg")
                 success?(fileAttachment)
             }
         }
