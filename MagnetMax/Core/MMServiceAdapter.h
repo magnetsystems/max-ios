@@ -66,6 +66,8 @@ The timeout interval, in seconds, for created requests. The default timeout inte
 
 @property(nonatomic, readonly) MMDevice *currentDevice;
 
+@property (nonatomic, strong) MMHTTPSessionManager *backgroundSessionManager;
+
 @property (nonatomic, strong) MMHTTPSessionManager *sessionManager;
 
 @property(nonatomic, strong) id<MMRequestOperationManager> requestOperationManager;

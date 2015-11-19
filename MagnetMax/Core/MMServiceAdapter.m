@@ -180,6 +180,15 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
     }
     serviceAdapter.sessionManager = sessionManager;
     
+    NSURLSessionConfiguration *backgroundConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    [backgroundConfiguration registerURLProtocolClass:[MMURLProtocol class]];
+    MMHTTPSessionManager *backgroundSessionManager = [[MMHTTPSessionManager alloc] initWithBaseURL:endpoint.URL sessionConfiguration:configuration serviceAdapter: serviceAdapter];
+    backgroundSessionManager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    if (serviceAdapter.client.securityPolicy) {
+        backgroundSessionManager.securityPolicy = serviceAdapter.client.securityPolicy;
+    }
+    serviceAdapter.backgroundSessionManager = backgroundSessionManager;
+    
     
     if (serviceAdapter.isSchemeHTTP) {
         [serviceAdapter.sessionManager.reachabilityManager setReachabilityStatusChangeBlock:serviceAdapter.networkReachabilityStatusBlock];
