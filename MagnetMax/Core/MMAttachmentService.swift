@@ -155,15 +155,16 @@ import AFNetworking
 @objc public class MMAttachmentService: NSObject {
     
     static public func upload(attachments: [MMAttachment], success: (() -> ())?, failure: ((error: NSError) -> Void)?) {
-        guard let uploadURL = NSURL(string: "com.magnet.server/file/save", relativeToURL: MMCoreConfiguration.serviceAdapter.endPoint.URL)?.absoluteString else {
+        guard let uploadURL = NSURL(string: "com.magnet.server/file/save/multiple", relativeToURL: MMCoreConfiguration.serviceAdapter.endPoint.URL)?.absoluteString else {
             fatalError("uploadURL should not be nil")
         }
         let request = AFHTTPRequestSerializer().multipartFormRequestWithMethod(MMStringFromRequestMethod(MMRequestMethod.POST), URLString: uploadURL, parameters: nil, constructingBodyWithBlock: { formData in
-            for attachment in attachments {
+            for i in 0..<attachments.count {
+                let attachment = attachments[i]
                 if let fileAttachment = attachment as? MMFileAttachment {
-                    let _ = try? formData.appendPartWithFileURL(fileAttachment.fileURL!, name: fileAttachment.name ?? "file", fileName: fileAttachment.fileName ?? fileAttachment.fileURL?.lastPathComponent ?? "unknownFile", mimeType: fileAttachment.mimeType)
+                    let _ = try? formData.appendPartWithFileURL(fileAttachment.fileURL!, name: fileAttachment.name ?? "file", fileName: fileAttachment.fileName ?? fileAttachment.fileURL?.lastPathComponent ?? "unknownFile\(i)", mimeType: fileAttachment.mimeType)
                 } else if let dataAttachment = attachment as? MMDataAttachment {
-                    formData.appendPartWithFileData(dataAttachment.data!, name: dataAttachment.name ?? "file", fileName: dataAttachment.fileName ?? "unknownFile", mimeType: dataAttachment.mimeType)
+                    formData.appendPartWithFileData(dataAttachment.data!, name: dataAttachment.name ?? "file", fileName: dataAttachment.fileName ?? "unknownFile\(i)", mimeType: dataAttachment.mimeType)
                 } else {
                     
                 }
@@ -175,11 +176,26 @@ import AFNetworking
             if let e = error {
                 failure?(error: e)
             } else {
-                if let data = responseObject as? NSData {
-                    if let attachmentID = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
-                        attachments.first?.attachmentID = attachmentID
+                do {
+                    let res = try AFJSONResponseSerializer().responseObjectForResponse(response, data: responseObject as? NSData)
+                    if let dictionary = res as? [String: String]  {
+                        for i in 0..<attachments.count {
+                            let attachment = attachments[i]
+                            var fileName: String = ""
+                            if let fileAttachment = attachment as? MMFileAttachment {
+                                fileName = fileAttachment.fileName ?? "unknownFile\(i)"
+                            } else if let dataAttachment = attachment as? MMDataAttachment {
+                                fileName = dataAttachment.fileName ?? "unknownFile\(i)"
+                            } else {
+                                
+                            }
+                            let attachmentID = dictionary[fileName]
+                            attachment.attachmentID = attachmentID
+                        }
                         success?()
                     }
+                } catch let error as NSError {
+                    failure?(error: error)
                 }
             }
         }
