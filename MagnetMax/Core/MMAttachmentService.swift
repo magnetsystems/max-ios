@@ -17,8 +17,6 @@
 
 import Foundation
 import AFNetworking
-import Mantle
-
 
 @objc public class MMAttachment: NSObject {
     public private(set) var attachmentID: String?
