@@ -132,7 +132,7 @@ import AFNetworking
     required public init(data: NSData?, fileName: String?, name: String?, summary: String?, mimeType: String) {
         self.data = data
         self.fileName = fileName
-        super.init(name: name, summary: fileName, mimeType: mimeType)
+        super.init(name: name, summary: summary, mimeType: mimeType)
     }
     
     override public func toDictionary() -> [String: AnyObject] {
