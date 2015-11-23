@@ -19,7 +19,7 @@ import Foundation
 import AFNetworking
 
 @objc public class MMAttachment: NSObject {
-    public private(set) var attachmentID: String?
+    public internal(set) var attachmentID: String?
     public private(set) var name: String?
     public private(set) var summary: String?
     public private(set) var mimeType: String
@@ -82,6 +82,13 @@ import AFNetworking
     
     class func fromDictionary(dictionary: [String: AnyObject]) -> Self? {
         return nil
+    }
+    
+    override public func isEqual(object: AnyObject?) -> Bool {
+        if let rhs = object as? MMAttachment {
+            return attachmentID != nil && attachmentID == rhs.attachmentID
+        }
+        return false
     }
 }
 

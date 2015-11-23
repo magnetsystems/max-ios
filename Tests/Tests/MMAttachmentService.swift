@@ -64,12 +64,12 @@ class MMAttachmentServiceSpec : QuickSpec {
             it("should be able to upload attachments") {
                 MMAttachmentService.upload([attachment, attachment2], success: {
                     //
-                }, failure: { (error) -> Void in
+                }, failure: { error in
                     //
                 })
                 
-                expect(attachment.attachmentID).toEventuallyNot(beNil(), timeout: 10)
-                expect(attachment2.attachmentID).toEventuallyNot(beNil(), timeout: 10)
+                expect(attachment.attachmentID).toEventuallyNot(beNil(), timeout: 20)
+                expect(attachment2.attachmentID).toEventuallyNot(beNil(), timeout: 20)
             }
             
             it("should be able to download attachments") {
