@@ -66,7 +66,7 @@ class MMUserSpec : QuickSpec {
                 }) { (error) -> Void in
                 }
                 
-                expect(loggedInUser?.userID).toEventually(beNil(), timeout: 10)
+                expect(loggedInUser).toEventually(beNil(), timeout: 10)
             }
         }
     }
