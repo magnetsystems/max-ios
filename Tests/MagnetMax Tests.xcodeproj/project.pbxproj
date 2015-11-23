@@ -15,6 +15,7 @@
 		21403E791BE33B6C00F24AC0 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21403E781BE33B6C00F24AC0 /* Utilities.swift */; };
 		21752B171BC46B6D001D204F /* MMXModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 21752B161BC46B6D001D204F /* MMXModule.m */; };
 		21779C991BDC2C6300C0C7FF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2103C3CE1BDC2A90005EADE0 /* CoreData.framework */; };
+		2190FEAF1C029D16001B1A3C /* MMUserSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2190FEAE1C029D16001B1A3C /* MMUserSpec.swift */; };
 		21953B171BC3881B002647E4 /* MMModuleSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21953B161BC3881B002647E4 /* MMModuleSpec.swift */; };
 		21953B191BC38851002647E4 /* MMX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21953B181BC38851002647E4 /* MMX.swift */; };
 		219D63421BB5F2DD00BC35C0 /* ATDictionaryConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 219D63411BB5F2DD00BC35C0 /* ATDictionaryConfiguration.m */; };
@@ -57,6 +58,7 @@
 		21403E781BE33B6C00F24AC0 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		21752B151BC46B6D001D204F /* MMXModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMXModule.h; sourceTree = "<group>"; };
 		21752B161BC46B6D001D204F /* MMXModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMXModule.m; sourceTree = "<group>"; };
+		2190FEAE1C029D16001B1A3C /* MMUserSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMUserSpec.swift; sourceTree = "<group>"; };
 		21953B161BC3881B002647E4 /* MMModuleSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMModuleSpec.swift; sourceTree = "<group>"; };
 		21953B181BC38851002647E4 /* MMX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMX.swift; sourceTree = "<group>"; };
 		219D63401BB5F2DD00BC35C0 /* ATDictionaryConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATDictionaryConfiguration.h; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 				21752B161BC46B6D001D204F /* MMXModule.m */,
 				21C3D92C1BD711B100A645D3 /* MMReachabilityConditionSpec.swift */,
 				21403E731BE326A500F24AC0 /* QualityOfServiceSpec.swift */,
+				2190FEAE1C029D16001B1A3C /* MMUserSpec.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -439,6 +442,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				21EC988F1B8D43AC005D1C84 /* MMValueTransformerSpec.m in Sources */,
+				2190FEAF1C029D16001B1A3C /* MMUserSpec.swift in Sources */,
 				21EC987E1B8D43AC005D1C84 /* ATDepartment.m in Sources */,
 				219D63421BB5F2DD00BC35C0 /* ATDictionaryConfiguration.m in Sources */,
 				21C3D92D1BD711B100A645D3 /* MMReachabilityConditionSpec.swift in Sources */,
