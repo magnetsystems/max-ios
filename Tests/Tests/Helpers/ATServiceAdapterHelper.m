@@ -32,6 +32,10 @@
 + (void)load {
     [MMCoreConfiguration setCurrentConfiguration:[self defaultConfiguration]];
     [MMCoreConfiguration setServiceAdapter:[self defaultHTTPTestAdapter]];
+    
+    [MMLogger sharedLogger].level = MMLoggerLevelVerbose;
+    [MMLogger sharedLogger].options = MMFileLogging/* | MMTTYLogging*/;
+    [[MMLogger sharedLogger] startLogging];
 }
 
 + (id <MMConfiguration>)defaultConfiguration {
