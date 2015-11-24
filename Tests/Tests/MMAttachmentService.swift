@@ -28,12 +28,12 @@ class MMAttachmentServiceSpec : QuickSpec {
             let user = MMUser()
             user.firstName = "Jane"
             user.lastName = "Doe"
-            user.email = "richmessageuser@magnet.com"
+            user.email = "richmessageuser_\(NSDate.timeIntervalSinceReferenceDate())@magnet.com"
             user.userName = user.email
             user.password = "magnet"
             
             beforeSuite {
-                let credential = NSURLCredential(user: user.email, password: user.password, persistence: .None)
+                let credential = NSURLCredential(user: user.userName, password: user.password, persistence: .None)
                 var loggedInUser: MMUser?
                 user.register({ user in
                     MMUser.login(credential, rememberMe: false, success: {

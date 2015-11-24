@@ -28,7 +28,7 @@ class MMUserSpec : QuickSpec {
             let user = MMUser()
             user.firstName = "Jane"
             user.lastName = "Doe"
-            user.email = "jane.doe@magnet.com"
+            user.email = "jane.doe_\(NSDate.timeIntervalSinceReferenceDate())@magnet.com"
             user.userName = user.email
             user.password = "magnet"
             
@@ -46,7 +46,7 @@ class MMUserSpec : QuickSpec {
             }
             
             it("should be able to login with valid information") {
-                let credential = NSURLCredential(user: user.email, password: user.password, persistence: .None)
+                let credential = NSURLCredential(user: user.userName, password: user.password, persistence: .None)
                 var loggedInUser: MMUser?
                 MMUser.login(credential, rememberMe: false, success: {
                     loggedInUser = MMUser.currentUser()
