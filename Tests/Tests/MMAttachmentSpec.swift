@@ -19,7 +19,6 @@ import Foundation
 import Quick
 import Nimble
 @testable import MagnetMax
-@testable import MagnetMaxCore
 
 class MMAttachmentSpec : QuickSpec {
     override func spec() {

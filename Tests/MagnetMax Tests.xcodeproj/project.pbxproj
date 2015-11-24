@@ -600,7 +600,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1B48D78DED2B8D3441DC6F58 /* Pods-ios.release.xcconfig */;
 			buildSettings = {
-				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"\"${PODS_ROOT}/Headers/Public\"",
