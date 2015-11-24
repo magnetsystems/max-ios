@@ -14,9 +14,9 @@ namespace :test do
       destinations.push("platform=iOS Simulator,OS=#{available_simulators[:runtime]},name=#{available_simulators[:device_names][0]}")
       puts "Will run tests for iOS Simulator on iOS #{available_simulators[:runtime]} using #{available_simulators[:device_names][0]}"
       # Shutdown the simulator
-      xcrun simctl shutdown "#{available_simulators[:device_names][0]}" > /dev/null 2>&1 || true
+      sh("xcrun simctl shutdown \"#{available_simulators[:device_names][0]}\" > /dev/null 2>&1 || true")
       # Erase all simulators
-      xcrun simctl erase "#{available_simulators[:device_names][0]}" > /dev/null 2>&1 || true
+      sh("xcrun simctl erase \"#{available_simulators[:device_names][0]}\" > /dev/null 2>&1 || true")
     }
 
     run_tests('iOS Tests', 'iphonesimulator', destinations)
