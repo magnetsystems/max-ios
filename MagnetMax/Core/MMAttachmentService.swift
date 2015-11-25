@@ -19,15 +19,35 @@ import Foundation
 import AFNetworking
 
 @objc public class MMAttachment: NSObject {
+    public private(set) var fileURL: NSURL?
+    public private(set) var data: NSData?
     public internal(set) var attachmentID: String?
     public private(set) var name: String?
     public private(set) var summary: String?
     public private(set) var mimeType: String
     
-    init(name: String?, summary: String?, mimeType: String) {
-        self.name = name
-        self.summary = summary
+    public convenience init(fileURL: NSURL, mimeType: String) {
+        self.init(fileURL: fileURL, mimeType: mimeType, name: nil, description: nil)
+    }
+    
+    public convenience init(fileURL: NSURL, mimeType: String, name: String?, description: String?) {
+        self.init(mimeType: mimeType, name: name, description: description)
+        self.fileURL = fileURL
+    }
+    
+    public convenience init(data: NSData, mimeType: String) {
+        self.init(data: data, mimeType: mimeType, name: nil, description: nil)
+    }
+    
+    public convenience init(data: NSData, mimeType: String, name: String?, description: String?) {
+        self.init(mimeType: mimeType, name: name, description: description)
+        self.data = data
+    }
+    
+    public required init(mimeType: String, name: String?, description: String?) {
         self.mimeType = mimeType
+        self.name = name
+        self.summary = description
     }
     
     func toDictionary() -> [String: AnyObject] {
@@ -81,7 +101,7 @@ import AFNetworking
     }
     
     class func fromDictionary(dictionary: [String: AnyObject]) -> Self? {
-        return nil
+        return self.init(mimeType: dictionary["mimeType"] as! String, name: dictionary["name"] as? String, description: dictionary["summary"] as? String)
     }
     
     override public func isEqual(object: AnyObject?) -> Bool {
@@ -90,72 +110,27 @@ import AFNetworking
         }
         return false
     }
-}
-
-@objc public class MMFileAttachment: MMAttachment {
-    public private(set) var fileURL: NSURL?
-    public private(set) var fileName: String?
     
-    required public init(fileURL: NSURL?, fileName: String?, name: String?, summary: String?, mimeType: String) {
-        self.fileName = fileName
-        self.fileURL = fileURL
-        super.init(name: name, summary: fileName, mimeType: mimeType)
-    }
-    
-    override public func toDictionary() -> [String: AnyObject] {
-        var dictionary = super.toDictionary()
-        if let fileName = self.fileName {
-            dictionary["fileName"] = fileName
-        }
-        
-        return dictionary
-    }
-    
-    override class func fromDictionary(dictionary: [String: AnyObject]) -> Self? {
-        let fileAttachment = self.init(fileURL: nil, fileName: dictionary["fileName"] as? String, name: dictionary["name"] as? String, summary: dictionary["summary"] as? String, mimeType: dictionary["mimeType"] as! String)
-        fileAttachment.attachmentID = dictionary["attachmentID"] as? String
-        
-        return fileAttachment
-    }
-    
-    public func download(success: ((attachment: MMFileAttachment) -> Void)?, failure: ((error: NSError) -> Void)?) {
-        // FIXME: Check for attachmentID
+    public func downloadFile(success: ((fileURL: NSURL) -> Void)?, failure: ((error: NSError) -> Void)?) {
         if let attachmentID = self.attachmentID {
             MMAttachmentService.download(attachmentID, success: { URL in
                 self.fileURL = URL
-                success?(attachment: self)
-                }) { error in
-                    failure?(error: error)
+                success?(fileURL: URL)
+            }) { error in
+                failure?(error: error)
             }
         }
     }
     
-}
-
-@objc public class MMDataAttachment: MMAttachment {
-    public private(set) var data: NSData?
-    public private(set) var fileName: String?
-    
-    required public init(data: NSData?, fileName: String?, name: String?, summary: String?, mimeType: String) {
-        self.data = data
-        self.fileName = fileName
-        super.init(name: name, summary: summary, mimeType: mimeType)
-    }
-    
-    override public func toDictionary() -> [String: AnyObject] {
-        var dictionary = super.toDictionary()
-        if let fileName = self.fileName {
-            dictionary["fileName"] = fileName
+    public func downloadData(success: ((data: NSData) -> Void)?, failure: ((error: NSError) -> Void)?) {
+        if let attachmentID = self.attachmentID {
+            MMAttachmentService.download(attachmentID, success: { URL in
+                self.data = NSData(contentsOfURL: URL)
+                success?(data: self.data!)
+            }) { error in
+                failure?(error: error)
+            }
         }
-        
-        return dictionary
-    }
-    
-    override class func fromDictionary(dictionary: [String: AnyObject]) -> Self? {
-        let dataAttachment = self.init(data: nil, fileName: dictionary["fileName"] as? String, name: dictionary["name"] as? String, summary: dictionary["summary"] as? String, mimeType: dictionary["mimeType"] as! String)
-        dataAttachment.attachmentID = dictionary["attachmentID"] as? String
-        
-        return dataAttachment
     }
 }
 
@@ -168,10 +143,10 @@ import AFNetworking
         let request = AFHTTPRequestSerializer().multipartFormRequestWithMethod(MMStringFromRequestMethod(MMRequestMethod.POST), URLString: uploadURL, parameters: nil, constructingBodyWithBlock: { formData in
             for i in 0..<attachments.count {
                 let attachment = attachments[i]
-                if let fileAttachment = attachment as? MMFileAttachment {
-                    let _ = try? formData.appendPartWithFileURL(fileAttachment.fileURL!, name: fileAttachment.name ?? "file", fileName: fileAttachment.fileName ?? fileAttachment.fileURL?.lastPathComponent ?? "unknownFile\(i)", mimeType: fileAttachment.mimeType)
-                } else if let dataAttachment = attachment as? MMDataAttachment {
-                    formData.appendPartWithFileData(dataAttachment.data!, name: dataAttachment.name ?? "file", fileName: dataAttachment.fileName ?? "unknownFile\(i)", mimeType: dataAttachment.mimeType)
+                if let fileURL = attachment.fileURL {
+                    let _ = try? formData.appendPartWithFileURL(fileURL, name: attachment.name ?? "file", fileName: "attachment\(i)", mimeType: attachment.mimeType)
+                } else if let data = attachment.data {
+                    formData.appendPartWithFileData(data, name: attachment.name ?? "file", fileName: "attachment\(i)", mimeType: attachment.mimeType)
                 } else {
                     
                 }
@@ -188,15 +163,7 @@ import AFNetworking
                     if let dictionary = res as? [String: String]  {
                         for i in 0..<attachments.count {
                             let attachment = attachments[i]
-                            var fileName: String = ""
-                            if let fileAttachment = attachment as? MMFileAttachment {
-                                fileName = fileAttachment.fileName ?? "unknownFile\(i)"
-                            } else if let dataAttachment = attachment as? MMDataAttachment {
-                                fileName = dataAttachment.fileName ?? "unknownFile\(i)"
-                            } else {
-                                
-                            }
-                            let attachmentID = dictionary[fileName]
+                            let attachmentID = dictionary["attachment\(i)"]
                             attachment.attachmentID = attachmentID
                         }
                         success?()

@@ -26,11 +26,11 @@ class MMAttachmentSpec : QuickSpec {
         describe("MMAttachment") {
             
             it("should implement Equatable") {
-                let attachment = MMFileAttachment(fileURL: NSURL(fileURLWithPath: NSBundle(forClass: MMAttachmentServiceSpec.self).pathForResource("GoldenGateBridge1", ofType: "jpg")!), fileName: "GoldenGateBridge1.jpg", name: "file", summary: "Golden Gate Bridge", mimeType: "image/jpeg")
+                let attachment = MMAttachment(fileURL: NSURL(fileURLWithPath: NSBundle(forClass: MMAttachmentServiceSpec.self).pathForResource("GoldenGateBridge1", ofType: "jpg")!), mimeType: "image/jpeg")
                 let attachmentID = NSUUID().UUIDString
                 attachment.attachmentID = attachmentID
                 
-                let attachment2 = MMFileAttachment(fileURL: NSURL(fileURLWithPath: NSBundle(forClass: MMAttachmentServiceSpec.self).pathForResource("GoldenGateBridge2", ofType: "jpg")!), fileName: "GoldenGateBridge2.jpg", name: "file", summary: "Golden Gate Bridge", mimeType: "image/jpeg")
+                let attachment2 = MMAttachment(fileURL: NSURL(fileURLWithPath: NSBundle(forClass: MMAttachmentServiceSpec.self).pathForResource("GoldenGateBridge2", ofType: "jpg")!), mimeType: "image/jpeg")
                 attachment2.attachmentID = attachmentID
                 
                 expect(attachment).to(equal(attachment2))

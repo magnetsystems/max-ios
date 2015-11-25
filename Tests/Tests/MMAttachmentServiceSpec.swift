@@ -57,9 +57,9 @@ class MMAttachmentServiceSpec : QuickSpec {
                 expect(loggedInUser).toEventually(beNil(), timeout: 10)
             }
             
-            let attachment = MMFileAttachment(fileURL: NSURL(fileURLWithPath: NSBundle(forClass: MMAttachmentServiceSpec.self).pathForResource("GoldenGateBridge1", ofType: "jpg")!), fileName: "GoldenGateBridge1.jpg", name: "file", summary: "Golden Gate Bridge", mimeType: "image/jpeg")
+            let attachment = MMAttachment(fileURL: NSURL(fileURLWithPath: NSBundle(forClass: MMAttachmentServiceSpec.self).pathForResource("GoldenGateBridge1", ofType: "jpg")!), mimeType: "image/jpeg")
             
-            let attachment2 = MMFileAttachment(fileURL: NSURL(fileURLWithPath: NSBundle(forClass: MMAttachmentServiceSpec.self).pathForResource("GoldenGateBridge2", ofType: "jpg")!), fileName: "GoldenGateBridge2.jpg", name: "file", summary: "Golden Gate Bridge", mimeType: "image/jpeg")
+            let attachment2 = MMAttachment(fileURL: NSURL(fileURLWithPath: NSBundle(forClass: MMAttachmentServiceSpec.self).pathForResource("GoldenGateBridge2", ofType: "jpg")!), mimeType: "image/jpeg", name: "Golden Gate Bridge", description: nil)
         
             it("should be able to upload attachments") {
                 MMAttachmentService.upload([attachment, attachment2], success: {
@@ -68,8 +68,8 @@ class MMAttachmentServiceSpec : QuickSpec {
                     //
                 })
                 
-                expect(attachment.attachmentID).toEventuallyNot(beNil(), timeout: 20)
-                expect(attachment2.attachmentID).toEventuallyNot(beNil(), timeout: 20)
+                expect(attachment.attachmentID).toEventuallyNot(beNil(), timeout: 10)
+                expect(attachment2.attachmentID).toEventuallyNot(beNil(), timeout: 10)
             }
             
             it("should be able to download attachments") {
