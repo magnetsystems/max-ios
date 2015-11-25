@@ -101,7 +101,10 @@ import AFNetworking
     }
     
     class func fromDictionary(dictionary: [String: AnyObject]) -> Self? {
-        return self.init(mimeType: dictionary["mimeType"] as! String, name: dictionary["name"] as? String, description: dictionary["summary"] as? String)
+        let attachment = self.init(mimeType: dictionary["mimeType"] as! String, name: dictionary["name"] as? String, description: dictionary["summary"] as? String)
+        attachment.attachmentID = dictionary["attachmentID"] as? String
+        
+        return attachment
     }
     
     override public func isEqual(object: AnyObject?) -> Bool {
