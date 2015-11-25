@@ -26,6 +26,15 @@ import AFNetworking
     public private(set) var summary: String?
     public private(set) var mimeType: String
     
+    public lazy var downloadURL: NSURL? = {
+        [unowned self] in
+        if let attachmentID = self.attachmentID, let accessToken = MMCoreConfiguration.serviceAdapter.HATToken {
+            let downloadURL = NSURL(string: "com.magnet.server/file/download/\(attachmentID)?access_token=\(accessToken)", relativeToURL: MMCoreConfiguration.serviceAdapter.endPoint.URL)
+            return downloadURL
+        }
+        return nil
+    }()
+    
     public convenience init(fileURL: NSURL, mimeType: String) {
         self.init(fileURL: fileURL, mimeType: mimeType, name: nil, description: nil)
     }
