@@ -369,7 +369,11 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 //	if (!refreshToken || [refreshToken isEqual:[NSNull null]]) {
 //	 refreshToken = [parameters valueForKey:@"refresh_token"];
 //	}
-    [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidReceiveConfigurationNotification object:self userInfo:jsonDictionary[@"config"]];
+    NSMutableDictionary *configuration = [NSMutableDictionary dictionaryWithDictionary:jsonDictionary[@"config"]];
+    if (configuration[@"mmx_app_id"] == nil) {
+        configuration[@"mmx_app_id"] = jsonDictionary[@"mmx_app_id"];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidReceiveConfigurationNotification object:self userInfo:configuration];
 
 	AFOAuthCredential *credential = [AFOAuthCredential credentialWithOAuthToken:[jsonDictionary valueForKey:@"access_token"] tokenType:[jsonDictionary valueForKey:@"token_type"]];
 
