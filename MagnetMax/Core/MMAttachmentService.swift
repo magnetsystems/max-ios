@@ -197,7 +197,10 @@ import AFNetworking
         
         let downloadTask = MMCoreConfiguration.serviceAdapter.backgroundSessionManager.downloadTaskWithRequest(request, progress: nil, destination: { targetPath, response in
             let documentsDirectoryURL = try! NSFileManager.defaultManager().URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false)
-            return documentsDirectoryURL.URLByAppendingPathComponent(response.suggestedFilename!)
+            let destination  = documentsDirectoryURL.URLByAppendingPathComponent("\(attachmentID)_\(response.suggestedFilename!)")
+            //            let _ = try? NSFileManager.defaultManager().removeItemAtURL(destination)
+            return destination
+            
         }) { response, filePath, error in
             if let e = error {
                 failure?(error: e)
