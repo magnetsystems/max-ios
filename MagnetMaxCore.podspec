@@ -27,7 +27,8 @@ Pod::Spec.new do |s|
   s.dependency 'AFNetworking/NSURLSession', '2.6.1'
   s.dependency 'CocoaLumberjack', '~> 2.2'
   # s.dependency 'Mantle', '~> 2.0'
-  s.dependency 'Mantle', '2.0.6'
+  # s.dependency 'Mantle', '2.0.6'
+  s.dependency 'Mantle', '~> 3.0'
   s.dependency 'AFOAuth2Manager', '2.2.1'
 
   s.libraries      = "icucore"
