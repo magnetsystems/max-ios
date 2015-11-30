@@ -21,6 +21,8 @@ import AFNetworking
 @objc public class MMAttachment: NSObject {
     public private(set) var fileURL: NSURL?
     public private(set) var data: NSData?
+    public private(set) var inputStream: NSInputStream?
+    public private(set) var length: Int64?
     public internal(set) var attachmentID: String?
     public private(set) var name: String?
     public private(set) var summary: String?
@@ -51,6 +53,16 @@ import AFNetworking
     public convenience init(data: NSData, mimeType: String, name: String?, description: String?) {
         self.init(mimeType: mimeType, name: name, description: description)
         self.data = data
+    }
+    
+    public convenience init(inputStream: NSInputStream, length: Int64, mimeType: String) {
+        self.init(inputStream: inputStream, length: length, mimeType: mimeType, name: nil, description: nil)
+    }
+    
+    public convenience init(inputStream: NSInputStream, length: Int64, mimeType: String, name: String?, description: String?) {
+        self.init(mimeType: mimeType, name: name, description: description)
+        self.inputStream = inputStream
+        self.length = length
     }
     
     public required init(mimeType: String, name: String?, description: String?) {
@@ -144,6 +156,19 @@ import AFNetworking
             }
         }
     }
+    
+    public func downloadInputStream(success: ((inputStream: NSInputStream) -> Void)?, failure: ((error: NSError) -> Void)?) {
+        if let attachmentID = self.attachmentID {
+            MMAttachmentService.download(attachmentID, success: { URL in
+                self.inputStream = NSInputStream(URL: URL)
+                let fileAttributes = try? NSFileManager.defaultManager().attributesOfItemAtPath(URL.path!)
+                self.length = fileAttributes?[NSFileSize] as? Int64
+                success?(inputStream: self.inputStream!)
+            }) { error in
+                failure?(error: error)
+            }
+        }
+    }
 }
 
 @objc public class MMAttachmentService: NSObject {
@@ -159,8 +184,8 @@ import AFNetworking
                     let _ = try? formData.appendPartWithFileURL(fileURL, name: attachment.name ?? "file", fileName: "attachment\(i)", mimeType: attachment.mimeType)
                 } else if let data = attachment.data {
                     formData.appendPartWithFileData(data, name: attachment.name ?? "file", fileName: "attachment\(i)", mimeType: attachment.mimeType)
-                } else {
-                    
+                } else if let inputStream = attachment.inputStream {
+                    formData.appendPartWithInputStream(inputStream, name: attachment.name ?? "file", fileName: "attachment\(i)", length: attachment.length ?? 0, mimeType: attachment.mimeType)
                 }
             }
             }, error: nil)
