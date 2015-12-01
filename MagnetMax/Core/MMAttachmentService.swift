@@ -145,7 +145,22 @@ import AFNetworking
         return false
     }
     
-    public func downloadFile(success: ((fileURL: NSURL) -> Void)?, failure: ((error: NSError) -> Void)?) {
+    public func downloadToFile(fileURL: NSURL, success: (Void -> Void)?, failure: ((error: NSError) -> Void)?) {
+        if let attachmentID = self.attachmentID {
+            MMAttachmentService.download(attachmentID, success: { URL in
+                do {
+                    try NSFileManager.defaultManager().moveItemAtURL(URL, toURL: fileURL)
+                } catch let error as NSError {
+                    failure?(error: error)
+                }
+                success?()
+            }) { error in
+                failure?(error: error)
+            }
+        }
+    }
+    
+    public func downloadFileWithSuccess(success: ((fileURL: NSURL) -> Void)?, failure: ((error: NSError) -> Void)?) {
         if let attachmentID = self.attachmentID {
             MMAttachmentService.download(attachmentID, success: { URL in
                 self.fileURL = URL
@@ -156,7 +171,7 @@ import AFNetworking
         }
     }
     
-    public func downloadData(success: ((data: NSData) -> Void)?, failure: ((error: NSError) -> Void)?) {
+    public func downloadDataWithSuccess(success: ((data: NSData) -> Void)?, failure: ((error: NSError) -> Void)?) {
         if let attachmentID = self.attachmentID {
             MMAttachmentService.download(attachmentID, success: { URL in
                 self.data = NSData(contentsOfURL: URL)
@@ -167,7 +182,7 @@ import AFNetworking
         }
     }
     
-    public func downloadInputStream(success: ((inputStream: NSInputStream, length: Int64) -> Void)?, failure: ((error: NSError) -> Void)?) {
+    public func downloadInputStreamWithSuccess(success: ((inputStream: NSInputStream, length: Int64) -> Void)?, failure: ((error: NSError) -> Void)?) {
         if let attachmentID = self.attachmentID {
             MMAttachmentService.download(attachmentID, success: { URL in
                 self.inputStream = NSInputStream(URL: URL)
@@ -180,7 +195,7 @@ import AFNetworking
         }
     }
     
-    public func downloadString(success: ((content: String) -> Void)?, failure: ((error: NSError) -> Void)?) {
+    public func downloadStringWithSuccess(success: ((content: String) -> Void)?, failure: ((error: NSError) -> Void)?) {
         if let attachmentID = self.attachmentID {
             MMAttachmentService.download(attachmentID, success: { URL in
                 if let data = NSData(contentsOfURL: URL), content = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
