@@ -399,6 +399,9 @@
          <FileRef
             location = "group:MMAttachmentService.swift">
          </FileRef>
+         <FileRef
+            location = "group:MMAttachment.swift">
+         </FileRef>
       </Group>
       <FileRef
          location = "group:MagnetMax.h">
