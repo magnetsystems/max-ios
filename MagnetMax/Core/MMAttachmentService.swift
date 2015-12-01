@@ -162,7 +162,7 @@ import AFNetworking
             MMAttachmentService.download(attachmentID, success: { URL in
                 self.inputStream = NSInputStream(URL: URL)
                 let fileAttributes = try? NSFileManager.defaultManager().attributesOfItemAtPath(URL.path!)
-                self.length = fileAttributes?[NSFileSize] as? Int64
+                self.length = (fileAttributes?[NSFileSize] as? NSNumber)?.longLongValue
                 success?(inputStream: self.inputStream!, length: self.length ?? 0)
             }) { error in
                 failure?(error: error)
