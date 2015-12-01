@@ -157,13 +157,13 @@ import AFNetworking
         }
     }
     
-    public func downloadInputStream(success: ((inputStream: NSInputStream) -> Void)?, failure: ((error: NSError) -> Void)?) {
+    public func downloadInputStream(success: ((inputStream: NSInputStream, length: Int64) -> Void)?, failure: ((error: NSError) -> Void)?) {
         if let attachmentID = self.attachmentID {
             MMAttachmentService.download(attachmentID, success: { URL in
                 self.inputStream = NSInputStream(URL: URL)
                 let fileAttributes = try? NSFileManager.defaultManager().attributesOfItemAtPath(URL.path!)
                 self.length = fileAttributes?[NSFileSize] as? Int64
-                success?(inputStream: self.inputStream!)
+                success?(inputStream: self.inputStream!, length: self.length ?? 0)
             }) { error in
                 failure?(error: error)
             }
