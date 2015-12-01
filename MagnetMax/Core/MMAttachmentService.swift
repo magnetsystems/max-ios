@@ -23,6 +23,7 @@ import AFNetworking
     public private(set) var data: NSData?
     public private(set) var inputStream: NSInputStream?
     public private(set) var length: Int64?
+    public private(set) var content: String?
     public internal(set) var attachmentID: String?
     public private(set) var name: String?
     public private(set) var summary: String?
@@ -63,6 +64,15 @@ import AFNetworking
         self.init(mimeType: mimeType, name: name, description: description)
         self.inputStream = inputStream
         self.length = length
+    }
+    
+    public convenience init(content: String, mimeType: String) {
+        self.init(content: content, mimeType: mimeType, name: nil, description: nil)
+    }
+    
+    public convenience init(content: String, mimeType: String, name: String?, description: String?) {
+        self.init(mimeType: mimeType, name: name, description: description)
+        self.content = content
     }
     
     public required init(mimeType: String, name: String?, description: String?) {
@@ -169,6 +179,18 @@ import AFNetworking
             }
         }
     }
+    
+    public func downloadString(success: ((content: String) -> Void)?, failure: ((error: NSError) -> Void)?) {
+        if let attachmentID = self.attachmentID {
+            MMAttachmentService.download(attachmentID, success: { URL in
+                if let data = NSData(contentsOfURL: URL), content = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
+                    success?(content: content)
+                }
+            }) { error in
+                failure?(error: error)
+            }
+        }
+    }
 }
 
 @objc public class MMAttachmentService: NSObject {
@@ -186,6 +208,10 @@ import AFNetworking
                     formData.appendPartWithFileData(data, name: attachment.name ?? "file", fileName: "attachment\(i)", mimeType: attachment.mimeType)
                 } else if let inputStream = attachment.inputStream {
                     formData.appendPartWithInputStream(inputStream, name: attachment.name ?? "file", fileName: "attachment\(i)", length: attachment.length ?? 0, mimeType: attachment.mimeType)
+                } else if let content = attachment.content {
+                    if let data = content.dataUsingEncoding(NSUTF8StringEncoding) {
+                        formData.appendPartWithFileData(data, name: attachment.name ?? "file", fileName: "attachment\(i)", mimeType: attachment.mimeType)
+                    }
                 }
             }
             }, error: nil)
