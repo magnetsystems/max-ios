@@ -190,4 +190,15 @@ public extension MMUser {
                 failure?(error: error)
             }.executeInBackground(nil)
     }
+    
+    override public func isEqual(object: AnyObject?) -> Bool {
+        if let rhs = object as? MMUser {
+            return userID != nil && userID == rhs.userID
+        }
+        return false
+    }
+    
+    override var hash: Int {
+        return userID != nil ? userID.hashValue : ObjectIdentifier(self).hashValue
+    }
 }

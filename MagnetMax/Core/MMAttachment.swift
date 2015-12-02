@@ -283,6 +283,10 @@ import Foundation
         return false
     }
     
+    override public var hash: Int {
+        return attachmentID?.hashValue ?? ObjectIdentifier(self).hashValue
+    }
+    
     /**
         Download the attachment to a specified file.
      
