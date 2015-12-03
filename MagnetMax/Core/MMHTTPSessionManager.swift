@@ -84,6 +84,7 @@ public class MMHTTPSessionManager: AFHTTPSessionManager {
                                 }
                             case .InvalidRefreshToken:
 //                                print(request)
+                                self.serviceAdapter.HATToken = nil
                                 originalCompletionHandler?(response, responseObject, error)
                             }
                         } else {
