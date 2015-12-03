@@ -56,7 +56,7 @@ NSString * const MMUserDidReceiveAuthenticationChallengeNotification = @"com.mag
         [super forwardInvocation:anInvocation];
     } else {
         
-        NSMutableURLRequest *request = [MMRestHandler requestWithInvocation:anInvocation
+        NSMutableURLRequest __unused *request = [MMRestHandler requestWithInvocation:anInvocation
                                                               serviceMethod:method
                                                              serviceAdapter:self.serviceAdapter];
         
@@ -68,8 +68,8 @@ NSString * const MMUserDidReceiveAuthenticationChallengeNotification = @"com.mag
         __unsafe_unretained FailureBlock failure = nil;
         [anInvocation getArgument:&success atIndex:(numberOfArguments - 2)]; // success block is always the second to last argument (penultimate)
         [anInvocation getArgument:&failure atIndex:(numberOfArguments - 1)]; // failure block is always the last argument
-        id successBlock = [success copy];
-        FailureBlock failureBlock = [failure copy];
+        id __unused successBlock = [success copy];
+        FailureBlock __unused failureBlock = [failure copy];
         
         MMCall *call = [[MMCall alloc] init];
         call.name = [NSString stringWithFormat:@"%@ %@", MMStringFromRequestMethod(method.requestMethod), method.path];

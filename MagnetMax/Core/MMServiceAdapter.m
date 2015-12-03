@@ -241,7 +241,8 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
                 }
             }];
             // We want this operation to finish before anything else.
-            serviceAdapter.CATTokenOperation = call;
+            // FIXME: Git rid of this cast!
+            serviceAdapter.CATTokenOperation = (Operation *)call;
             [call executeInBackground:nil];
                                                 
         });
