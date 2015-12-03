@@ -41,7 +41,10 @@ public class MMHTTPSessionManager: AFHTTPSessionManager {
         
         let completionHandler = { (response: NSURLResponse, responseObject: AnyObject?, error: NSError?) in
             guard let URLResponse = response as? NSHTTPURLResponse else {
-                fatalError("Could not cast response to NSHTTPURLResponse")
+                // FIXME: Log this error
+                print("Could not cast response to NSHTTPURLResponse")
+                return
+//                fatalError("Could not cast response to NSHTTPURLResponse")
             }
             if URLResponse.statusCode == 401 {
                 if let wwwAuthenticateHeader = URLResponse.allHeaderFields["WWW-Authenticate"] as? String {
@@ -85,6 +88,19 @@ public class MMHTTPSessionManager: AFHTTPSessionManager {
                             }
                         } else {
                             // TODO: Log error
+                            // This is possible if the server is not able to decrypt our access token.
+                            // Perhaps, the salt changed since the server was rebuilt?
+                            self.serviceAdapter.CATToken = nil
+                            self.serviceAdapter.HATToken = nil
+                            
+                            self.serviceAdapter.authenticateApplicationWithSuccess({
+                                let requestWithNewToken = request.mutableCopy() as! NSMutableURLRequest
+                                requestWithNewToken.setValue(self.serviceAdapter.bearerAuthorization(), forHTTPHeaderField: "Authorization")
+                                let originalTask = super.dataTaskWithRequest(requestWithNewToken, completionHandler: originalCompletionHandler)
+                                originalTask.resume()
+                            }) { error in
+                                print(error)
+                            }
                         }
                     }
                 }
