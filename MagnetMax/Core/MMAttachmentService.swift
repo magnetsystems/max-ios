@@ -74,7 +74,7 @@ import AFNetworking
     static public func download(attachmentID: String, userID userIdentifier: String?, success: ((NSURL) -> ())?, failure: ((error: NSError) -> Void)?) {
         var userIDQueryParam = ""
         if let userID = userIdentifier {
-            userIDQueryParam = "&user_id=\(userID)"
+            userIDQueryParam = "?user_id=\(userID)"
         }
         guard let downloadURL = NSURL(string: "com.magnet.server/file/download/\(attachmentID)\(userIDQueryParam)", relativeToURL: MMCoreConfiguration.serviceAdapter.endPoint.URL) else {
             fatalError("downloadURL should not be nil")
