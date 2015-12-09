@@ -20,7 +20,7 @@ import AFNetworking
 
 @objc public class MMAttachmentService: NSObject {
     
-    static public func upload(attachments: [MMAttachment], metaData:[String: String], success: (() -> ())?, failure: ((error: NSError) -> Void)?) {
+    static public func upload(attachments: [MMAttachment], metaData:[String: String]?, success: (() -> ())?, failure: ((error: NSError) -> Void)?) {
         guard let uploadURL = NSURL(string: "com.magnet.server/file/save/multiple", relativeToURL: MMCoreConfiguration.serviceAdapter.endPoint.URL)?.absoluteString else {
             fatalError("uploadURL should not be nil")
         }
@@ -42,8 +42,10 @@ import AFNetworking
             }, error: nil)
         
         // Add metaData
-        for (key, value) in metaData {
-            request.setValue(value, forHTTPHeaderField: "metadata_\(key)")
+        if let metaDataToAdd = metaData {
+            for (key, value) in metaDataToAdd {
+                request.setValue(value, forHTTPHeaderField: "metadata_\(key)")
+            }
         }
         
         request.setValue("Bearer \(MMCoreConfiguration.serviceAdapter.HATToken)", forHTTPHeaderField: "Authorization")

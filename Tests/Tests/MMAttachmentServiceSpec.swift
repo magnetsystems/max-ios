@@ -62,7 +62,7 @@ class MMAttachmentServiceSpec : QuickSpec {
             let attachment2 = MMAttachment(fileURL: NSURL(fileURLWithPath: NSBundle(forClass: MMAttachmentServiceSpec.self).pathForResource("GoldenGateBridge2", ofType: "jpg")!), mimeType: "image/jpeg", name: "Golden Gate Bridge", description: nil)
         
             it("should be able to upload attachments") {
-                MMAttachmentService.upload([attachment, attachment2], success: {
+                MMAttachmentService.upload([attachment, attachment2], metaData:nil, success: {
                     //
                 }, failure: { error in
                     //
@@ -74,7 +74,7 @@ class MMAttachmentServiceSpec : QuickSpec {
             
             it("should be able to download attachments") {
                 var localFilePath: NSURL?
-                MMAttachmentService.download(attachment.attachmentID!, success: { filePath in
+                MMAttachmentService.download(attachment.attachmentID!, userID: MMUser.currentUser()?.userID, success: { filePath in
                     localFilePath = filePath
                 }, failure: { error in
                     //
