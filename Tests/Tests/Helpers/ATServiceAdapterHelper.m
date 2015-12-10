@@ -18,6 +18,7 @@
 #import "ATServiceAdapterHelper.h"
 #import <AFNetworking/AFSecurityPolicy.h>
 #import "ATDictionaryConfiguration.h"
+#import <AFOAuth2Manager/AFOAuth2Manager.h>
 
 @interface ATServiceAdapterHelper ()
 
@@ -30,8 +31,15 @@
 @implementation ATServiceAdapterHelper
 
 + (void)load {
+    // Delete the CAT token
+    [AFOAuthCredential deleteCredentialWithIdentifier:@"com.magnet.networking.cattoken"];
+    
     [MMCoreConfiguration setCurrentConfiguration:[self defaultConfiguration]];
     [MMCoreConfiguration setServiceAdapter:[self defaultHTTPTestAdapter]];
+    
+    [MMLogger sharedLogger].level = MMLoggerLevelVerbose;
+    [MMLogger sharedLogger].options = MMFileLogging/* | MMTTYLogging*/;
+    [[MMLogger sharedLogger] startLogging];
 }
 
 + (id <MMConfiguration>)defaultConfiguration {

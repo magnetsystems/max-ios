@@ -21,7 +21,6 @@
 #import "ATSubModel.h"
 #import "ATServiceAdapterHelper.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
-#import <AFNetworking/AFHTTPSessionManager.h>
 #import "ATDictionaryConfiguration.h"
 #import "ATDelayCondition.h"
 

@@ -36,13 +36,6 @@ SPEC_BEGIN(MMServiceAdapterSpec)
             context(@"with a MMService subclass", ^{
                 it(@"should return an instance of the correct class", ^{
                     MMServiceAdapter *serviceAdapter = [MMServiceAdapter adapter];
-                    serviceAdapter.requestInterceptor = ^(id <MMRequestFacade> request) {
-                        [request addValue:@"05a40e3f8f81e89d342d1bea65d53ed5a0d3c3df" forHTTPHeaderField:@"X-Api-Key"];
-                    };
-                    serviceAdapter.profiler = [MMProfiler profilerWithBeforeCallData:nil
-                                                                          completion:^(id requestInfo, long elapsedTime, int statusCode, id beforeCallData) {
-
-                                                                          }];
                     serviceAdapter.client = [MMClient client];
                     NSURL *URL = [NSURL URLWithString:@"https://api.github.com"];
                     serviceAdapter.endPoint = [MMEndPoint endPointWithURL:URL];

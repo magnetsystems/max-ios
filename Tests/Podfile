@@ -1,5 +1,6 @@
 source 'https://github.com/CocoaPods/Specs'
 source 'https://github.com/magnetsystems/Specs'
+source 'https://github.com/magnetsystems/iOS-Distribution'
 
 xcodeproj 'MagnetMax Tests'
 workspace '../MagnetMax'
@@ -32,4 +33,8 @@ end
 post_install do |installer|
   `find Pods -regex 'Pods\\/Quick\\/Quick\\/Quick\\.h' -print0 | xargs -0 sed -i '' 's/\\(<\\)Quick\\/\\(.*\\)\\(>\\)/\\"\\2\\"/'`
   `find Pods -regex 'Pods\\/Nimble\\/Nimble\\/Nimble\\.h' -print0 | xargs -0 sed -i '' 's/\\(<\\)Nimble\\/\\(.*\\)\\(>\\)/\\"\\2\\"/'`
+
+  installer.pods_project.build_configurations.each do |config|
+    config.build_settings['ENABLE_TESTABILITY'] = 'YES'
+  end
 end
