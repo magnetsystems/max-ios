@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name               =  'MagnetMaxCore'
-  s.version            =  '2.1.1'
+  s.version            =  '2.2.0'
   s.license            =  { :type => 'Apache 2.0' }
   s.summary            =  'The core of Magnet Max.'
   s.homepage           =  'https://www.magnet.com/magnet-max/'
