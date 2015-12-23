@@ -1,44 +1,56 @@
 /*
- * Copyright (c) 2015 Magnet Systems, Inc.
- * All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you
- * may not use this file except in compliance with the License. You
- * may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
- * implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
+* Copyright (c) 2015 Magnet Systems, Inc.
+* All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you
+* may not use this file except in compliance with the License. You
+* may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+* implied. See the License for the specific language governing
+* permissions and limitations under the License.
+*/
 
 import Foundation
 import MagnetMaxCore
 import MMX
 
 
-@objc public class MagnetMax: NSObject {
+@objc public class MagnetMax: NSObject, MMUserDelegate {
     
     /// The service adapter with the current configuration.
     static var serviceAdapter: MMServiceAdapter?
-    
     /**
-        Configure MagnetMax with specified configuration.
+     Configure MagnetMax with specified configuration.
      
-        - Parameters:
-            - configuration: The configuration to be used.
-    */
+     - Parameters:
+     - configuration: The configuration to be used.
+     */
     static public func configure(configuration: MMConfiguration) {
         registerObservers()
         MMCoreConfiguration.currentConfiguration = configuration
         serviceAdapter = MMServiceAdapter(configuration: configuration)
         MMCoreConfiguration.serviceAdapter = serviceAdapter
+        MMUser.delegate = self
         
         // Register Modules
         //        initModule(MMX.sharedInstance())
+    }
+    
+    static public func overrideCompletion(completion: ((error: NSError?) -> Void), error: NSError?, context: String) {
+        guard let e = error else {
+            initializeModule(MMX.sharedInstance(), success: {
+                completion(error:nil)
+                }) { (error) -> Void in
+                    completion(error:error)
+            }
+            return
+        }
+        completion(error: e)
     }
     
     /// Registers observers for various NSNotifications.
@@ -51,11 +63,11 @@ import MMX
     }
     
     /**
-        Acts as the configuration receiver.
+     Acts as the configuration receiver.
      
-        - Parameters:
-            - notification: The notification that was received.
-    */
+     - Parameters:
+     - notification: The notification that was received.
+     */
     @objc static private func configurationReceived(notification: NSNotification) {
         configuration = notification.userInfo
         for module in modules {
@@ -66,11 +78,11 @@ import MMX
     }
     
     /**
-        Acts as the appToken receiver.
+     Acts as the appToken receiver.
      
-        - Parameters:
-            - notification: The notification that was received.
-    */
+     - Parameters:
+     - notification: The notification that was received.
+     */
     @objc static private func appTokenReceived(notification: NSNotification) {
         let userInfo = notification.userInfo as! [String: String]
         appID = userInfo["appID"]
@@ -84,11 +96,11 @@ import MMX
     }
     
     /**
-        Acts as the userToken receiver.
+     Acts as the userToken receiver.
      
-        - Parameters:
-            - notification: The notification that was received.
-    */
+     - Parameters:
+     - notification: The notification that was received.
+     */
     @objc static private func userTokenReceived(notification: NSNotification) {
         let userInfo = notification.userInfo as! [String: String]
         userID = userInfo["userID"]
@@ -102,11 +114,11 @@ import MMX
     }
     
     /**
-        Acts as the userToken invalidated event receiver.
+     Acts as the userToken invalidated event receiver.
      
-        - Parameters:
-            - notification: The notification that was received.
-    */
+     - Parameters:
+     - notification: The notification that was received.
+     */
     @objc static private func userTokenInvalidated(notification: NSNotification) {
         
         if let userInfo = notification.userInfo as? [String: String] {
@@ -126,10 +138,10 @@ import MMX
     }
     
     /**
-        Acts as the userToken expired event receiver.
+     Acts as the userToken expired event receiver.
      
-        - Parameters:
-            - notification: The notification that was received.
+     - Parameters:
+     - notification: The notification that was received.
      */
     @objc static private func userTokenExpired(notification: NSNotification) {
         NSNotificationCenter.defaultCenter().postNotificationName(MMApplicationDidReceiveAuthenticationChallengeNotification, object: nil, userInfo: notification.userInfo)
@@ -137,14 +149,18 @@ import MMX
     }
     
     /**
-        Initialize a module.
+     Initialize a module.
      
-        - Parameters:
-            - module: The module to be initialized.
-            - success: A block object to be executed when the initialization finishes successfully. This block has no return value and takes no arguments.
-            - failure: A block object to be executed when the initialization finishes with an error. This block has no return value and takes one argument: the error object.
-    */
+     - Parameters:
+     - module: The module to be initialized.
+     - success: A block object to be executed when the initialization finishes successfully. This block has no return value and takes no arguments.
+     - failure: A block object to be executed when the initialization finishes with an error. This block has no return value and takes one argument: the error object.
+     */
     static public func initModule(module: MMModule, success: (() -> Void), failure: ((error: NSError) -> Void)) {
+        success()
+    }
+    
+    static private func initializeModule(module: MMModule, success: (() -> Void), failure: ((error: NSError) -> Void)) {
         dispatch_sync(moduleQueue) {
             self.success = success
             self.failure = failure
@@ -153,11 +169,11 @@ import MMX
     }
     
     /**
-        Deinitialize a module.
+     Deinitialize a module.
      
-        - Parameters:
-            - module: The module to be deinitialized.
-    */
+     - Parameters:
+     - module: The module to be deinitialized.
+     */
     static private func deinitModule(module: MMModule) {
         modules = modules.filter {$0 !== module}
         module.shouldDeInitialize?()
@@ -166,7 +182,7 @@ import MMX
     /// A queue to synchronize module initialization.
     static private var moduleQueue: dispatch_queue_t = {
         return dispatch_queue_create("com.magnet.iOS.moduleQueue", nil)
-        }()
+    }()
     
     /// The current configuration.
     static private var configuration: [NSObject: AnyObject]?
@@ -200,8 +216,8 @@ import MMX
                 module?.didReceiveUserToken?(userToken!, userID: userID!, deviceID: deviceID!)
             }
             // FIXME: Don't nil out the configuration for now
-//            success = nil
-//            failure = nil
+            //            success = nil
+            //            failure = nil
         }
     }
     
