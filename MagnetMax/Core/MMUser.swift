@@ -69,6 +69,8 @@ public extension MMUser {
             - failure: A block object to be executed when the login finishes with an error. This block has no return value and takes one argument: the error object.
      */
     static public func login(credential: NSURLCredential, rememberMe: Bool, success: (() -> Void)?, failure: ((error: NSError) -> Void)?) {
+        
+        let loginClosure : () -> Void = { () in
         MMCoreConfiguration.serviceAdapter.loginWithUsername(credential.user, password: credential.password, rememberMe: rememberMe, success: { _ in
             // Get current user now
             MMCoreConfiguration.serviceAdapter.getCurrentUserWithSuccess({ user -> Void in
@@ -103,6 +105,19 @@ public extension MMUser {
                     failure?(error: error)
                 }
             }.executeInBackground(nil)
+        }
+        
+        //begin login
+        if currentlyLoggedInUser != nil {
+            MMUser.logout({ () in
+                loginClosure()
+                }) { error in
+                    failure?(error : error);
+            }
+            
+        } else {
+            loginClosure()
+        }
     }
     
     static private func handleCompletion(success: (() -> Void)?, failure: ((error: NSError) -> Void)?, error: NSError?, context : String) {

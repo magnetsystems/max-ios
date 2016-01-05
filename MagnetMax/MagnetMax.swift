@@ -165,6 +165,14 @@ import MMX
         dispatch_sync(moduleQueue) {
             self.success = success
             self.failure = failure
+            
+            for var i : NSInteger = 0; i < modules.count; i++ {
+                if modules[i].name == module.name || module === modules[i] {
+                    modules[i].shouldDeInitialize?()
+                }
+            }
+            
+            modules = modules.filter {$0.name != module.name && module !== $0}
             modules.append(module)
         }
     }
