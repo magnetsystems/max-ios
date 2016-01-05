@@ -6,3 +6,4 @@
 
 #import "ATPrimitiveTypeService.h"
 #import "ATDateType.h"
+#import "ATServiceAdapterHelper.h"
