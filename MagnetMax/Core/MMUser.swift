@@ -92,7 +92,7 @@ public extension MMUser {
                 
                 }, failure: { error in
                     if let _ = self.delegate {
-                        handleCompletion(success, failure: failure, error : nil, context: "com.magnet.login.failed")
+                        handleCompletion(success, failure: failure, error : error, context: "com.magnet.login.failed")
                     } else {
                         failure?(error: error)
                     }
@@ -100,7 +100,7 @@ public extension MMUser {
             
             }) { error in
                 if let _ = self.delegate {
-                    handleCompletion(success, failure: failure, error : nil, context: "com.magnet.login.failed")
+                    handleCompletion(success, failure: failure, error : error, context: "com.magnet.login.failed")
                 } else {
                     failure?(error: error)
                 }
