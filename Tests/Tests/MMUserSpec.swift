@@ -68,6 +68,48 @@ class MMUserSpec : QuickSpec {
                 
                 expect(loggedInUser).toEventually(beNil(), timeout: 10)
             }
+            
+            let user2 = MMUser()
+            user2.firstName = "Jane2"
+            user2.lastName = "Doe2"
+            user2.email = "jane2.doe2_\(NSDate.timeIntervalSinceReferenceDate())@magnet.com"
+            user2.userName = user2.email
+            user2.password = "magnet"
+            
+            it("should be able to register second user with valid information") {
+                var createdUser: MMUser?
+                user2.register({ user in
+                    createdUser = user
+                    }) { error in
+                }
+                
+                expect(createdUser?.userID).toEventually(beNil(), timeout: 10)
+                expect(createdUser?.firstName).toEventually(equal(user2.firstName), timeout: 10)
+                expect(createdUser?.lastName).toEventually(equal(user2.lastName), timeout: 10)
+                expect(createdUser?.email).toEventually(equal(user2.email), timeout: 10)
+            }
+            
+            it("should be able to login multiple times") {
+                MagnetMax.configure(ATServiceAdapterHelper.defaultConfiguration())
+                let credential = NSURLCredential(user: user.userName, password: user.password, persistence: .None)
+                let credential2 = NSURLCredential(user: user2.userName, password: user2.password, persistence: .None)
+                var didFinish : Bool = false
+                MMUser.login(credential, rememberMe: false, success: {
+                    MMUser.login(credential, rememberMe: true, success: {
+                        MMUser.login(credential, rememberMe: false, success: {
+                            MMUser.login(credential2, rememberMe: false, success: {
+                         didFinish = true
+                            }) { error in
+                        }
+                        }) { error in
+                    }
+                        }) { error in
+                    }
+                    }) { error in
+                }
+                
+                expect(didFinish).toEventually(beTrue(), timeout: 15)
+            }
         }
     }
 }
