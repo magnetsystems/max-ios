@@ -163,8 +163,16 @@ import MMX
     
     static private func initializeModule(module: MMModule, success: (() -> Void), failure: ((error: NSError) -> Void)) {
         dispatch_sync(moduleQueue) {
-            self.success = success
-            self.failure = failure
+            self.success = {
+                success()
+                self.success = self.successNull
+                self.failure = self.failureNull
+            }
+            self.failure = { error in
+                failure(error: error)
+                self.success = self.successNull
+                self.failure = self.failureNull
+            }
             
             for var i : NSInteger = 0; i < modules.count; i++ {
                 if modules[i].name == module.name || module === modules[i] {
@@ -207,8 +215,10 @@ import MMX
     static private var userToken: String?
     /// A block object to be executed when the initialization finishes successfully. This block has no return value and takes no arguments.
     static private var success: (() -> Void)!
+    static private let successNull: (() -> Void) = {}
     /// A block object to be executed when the initialization finishes with an error. This block has no return value and takes one argument: the error object.
     static private var failure: ((error: NSError) -> Void)!
+    static private let failureNull: ((error: NSError) -> Void) = {error in}
     
     /// The currently registered modules.
     static var modules: [MMModule] = [] {
