@@ -145,7 +145,7 @@ import MMX
             - notification: The notification that was received.
      */
     @objc static private func userTokenExpired(notification: NSNotification) {
-        NSNotificationCenter.defaultCenter().postNotificationName(MMApplicationDidReceiveAuthenticationChallengeNotification, object: nil, userInfo: notification.userInfo)
+        NSNotificationCenter.defaultCenter().postNotificationName(MMUserDidReceiveAuthenticationChallengeNotification, object: nil, userInfo: notification.userInfo)
         userTokenInvalidated(notification)
     }
     
