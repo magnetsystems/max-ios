@@ -7,6 +7,12 @@
       <Group
          location = "group:Core"
          name = "Core">
+         <FileRef
+            location = "group:MMUpdateProfileRequest.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMUpdateProfileRequest.m">
+         </FileRef>
          <Group
             location = "group:CoreData"
             name = "CoreData">
