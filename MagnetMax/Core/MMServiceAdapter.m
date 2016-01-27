@@ -229,8 +229,10 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
                         
                         [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidRestoreHATTokenNotification object:self userInfo:nil];
                         
-                        serviceAdapter.username = MMUser.currentUser.userName;
-                        [serviceAdapter registerCurrentDeviceWithSuccess:nil failure:nil];
+                        [MMUser loginWithSavedCredential:^{
+                            serviceAdapter.username = MMUser.currentUser.userName;
+                            [serviceAdapter registerCurrentDeviceWithSuccess:nil failure:nil];
+                        } failure:nil];
                     }
                     //[serviceAdapter passUserTokenToRegisteredServices];
                 }

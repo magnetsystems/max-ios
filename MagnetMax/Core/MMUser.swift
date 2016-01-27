@@ -79,12 +79,7 @@ public extension MMUser {
      - failure: A block object to be executed when the login finishes with an error. This block has no return value and takes one argument: the error object.
      */
     static public func loginWithSavedCredential(success: (() -> Void)?, failure: ((error: NSError) -> Void)?) {
-        if self.userLoggedInStatus() != .CanRetrieveCredential {
-            let error = NSError.init(domain:"com.magnet.mms.no.user", code: 400, userInfo: nil)
-            failure?(error: error)
-            return
-        }
-  
+
             let completion : ((error : NSError?) -> Void) = { error in
                 guard let e = error else {
                     success?()
@@ -95,11 +90,18 @@ public extension MMUser {
                 failure?(error: e)
             }
         
-        if currentUser() != nil && tokenRefreshStatus == .None {
+        if self.userLoggedInStatus() == .NotLoggedIn {
+            let error = NSError.init(domain:"com.magnet.mms.no.user", code: 400, userInfo: nil)
+            completion(error: error)
+            
+            return
+        } else if currentUser() != nil && tokenRefreshStatus == .None {
             completion(error: nil)
+            
             return
         }
-            loginWithSavedCredentialCompletionBlocks.append(completion)
+        
+        loginWithSavedCredentialCompletionBlocks.append(completion)
         
         tokenRefreshStatus = tokenRefreshStatus.union(.WaitingForRefresh)
         if tokenRefreshStatus.contains(.HasRefreshed) && loginWithSavedCredentialCompletionBlocks.count == 1 {
