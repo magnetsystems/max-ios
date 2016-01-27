@@ -199,7 +199,8 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
     AFOAuthCredential *savedCATToken = [AFOAuthCredential retrieveCredentialWithIdentifier:[serviceAdapter CATTokenIdentifier]];
     AFOAuthCredential *savedHATToken = [AFOAuthCredential retrieveCredentialWithIdentifier:[serviceAdapter HATTokenIdentifier]];
     
-    if ((!savedCATToken || savedCATToken.isExpired)) {
+    BOOL shouldNotCacheCATToken = YES;
+    if ((shouldNotCacheCATToken || !savedCATToken || savedCATToken.isExpired)) {
         [serviceAdapter authorizeApplicationWithSuccess:^(AFOAuthCredential *credential) {
             [AFOAuthCredential storeCredential:credential withIdentifier:[serviceAdapter CATTokenIdentifier]];
         } failure:^(NSError *error) {
