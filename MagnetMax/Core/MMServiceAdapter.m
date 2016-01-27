@@ -37,6 +37,7 @@
 NSString * const MMServiceAdapterDidReceiveConfigurationNotification = @"com.magnet.networking.configuration.receive";
 NSString * const MMServiceAdapterDidReceiveCATTokenNotification = @"com.magnet.networking.cattoken.receive";
 NSString * const MMServiceAdapterDidReceiveHATTokenNotification = @"com.magnet.networking.hattoken.receive";
+NSString * const MMServiceAdapterDidRestoreHATTokenNotification = @"com.magnet.networking.hattoken.restored";
 NSString * const MMServiceAdapterDidInvalidateHATTokenNotification = @"com.magnet.networking.hattoken.invalidate";
 NSString * const MMServiceAdapterDidReceiveInvalidCATTokenNotification = @"com.magnet.networking.cattoken.challenge.receive";
 NSString * const MMServiceAdapterDidReceiveAuthenticationChallengeNotification = @"com.magnet.networking.challenge.receive";
@@ -198,7 +199,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
     
     AFOAuthCredential *savedCATToken = [AFOAuthCredential retrieveCredentialWithIdentifier:[serviceAdapter CATTokenIdentifier]];
     AFOAuthCredential *savedHATToken = [AFOAuthCredential retrieveCredentialWithIdentifier:[serviceAdapter HATTokenIdentifier]];
-    
+    [MMUser registerForNotifications];
     if ((!savedCATToken || savedCATToken.isExpired)) {
         [serviceAdapter authorizeApplicationWithSuccess:^(AFOAuthCredential *credential) {
             [AFOAuthCredential storeCredential:credential withIdentifier:[serviceAdapter CATTokenIdentifier]];
@@ -225,8 +226,13 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
                     serviceAdapter.refreshToken = savedHATToken.refreshToken;
                     if (!savedHATToken.isExpired) {
                         serviceAdapter.HATToken = savedHATToken.accessToken;
+                        
+                        [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidRestoreHATTokenNotification object:self userInfo:nil];
+                        
+                        serviceAdapter.username = MMUser.currentUser.userName;
+                        [serviceAdapter registerCurrentDeviceWithSuccess:nil failure:nil];
                     }
-//                    [serviceAdapter passUserTokenToRegisteredServices];
+                    //[serviceAdapter passUserTokenToRegisteredServices];
                 }
             } failure:^(NSError *error) {
                 NSDictionary *configuration = [[NSUserDefaults standardUserDefaults] dictionaryForKey:kMMConfigurationKey];
@@ -327,7 +333,6 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 		if (credential) {
 			self.CATToken = credential.accessToken;
 			self.currentCATTokenRequestStatus = MMCATTokenRequestStatusDone;
-
             self.applicationAuthenticationError = nil;
 			[self passAppTokenToRegisteredServices];
             if (success) {
@@ -347,6 +352,11 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 		self.applicationAuthenticationError = error;
 	}];
 	[self.requestOperationManager.operationQueue addOperation:self.CATTokenOperation];
+}
+
+- (BOOL)hasAuthToken {
+    AFOAuthCredential *savedHATToken = [AFOAuthCredential retrieveCredentialWithIdentifier:[self HATTokenIdentifier]];
+    return savedHATToken && !savedHATToken.isExpired;
 }
 
 + (AFOAuthCredential *)credentialFromResponseObject:(id)responseObject {
