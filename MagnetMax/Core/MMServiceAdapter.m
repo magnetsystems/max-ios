@@ -199,12 +199,12 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
     AFOAuthCredential *savedCATToken = [AFOAuthCredential retrieveCredentialWithIdentifier:[serviceAdapter CATTokenIdentifier]];
     AFOAuthCredential *savedHATToken = [AFOAuthCredential retrieveCredentialWithIdentifier:[serviceAdapter HATTokenIdentifier]];
     
-    BOOL shouldNotCacheCATToken = YES;
-    if ((shouldNotCacheCATToken || !savedCATToken || savedCATToken.isExpired)) {
+    if (!savedCATToken || savedCATToken.isExpired) {
         [serviceAdapter authorizeApplicationWithSuccess:^(AFOAuthCredential *credential) {
             [AFOAuthCredential storeCredential:credential withIdentifier:[serviceAdapter CATTokenIdentifier]];
         } failure:^(NSError *error) {
             [AFOAuthCredential deleteCredentialWithIdentifier:[serviceAdapter CATTokenIdentifier]];
+            [AFOAuthCredential deleteCredentialWithIdentifier:[serviceAdapter HATTokenIdentifier]];
         }];
     } else {
         serviceAdapter.CATToken = savedCATToken.accessToken;
@@ -701,16 +701,20 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 }
 
 - (NSString *)CATTokenIdentifier {
-    return [NSString stringWithFormat:@"%@.%@", [self appID], MMCATTokenIdentifier];
+    return [NSString stringWithFormat:@"%@.%@.%@", [self appID],[self clientID], [self deviceID], MMCATTokenIdentifier];
 }
 
 - (NSString *)HATTokenIdentifier {
-    return [NSString stringWithFormat:@"%@.%@", [self appID], MMHATTokenIdentifier];
+    return [NSString stringWithFormat:@"%@.%@", [self appID], [self deviceID], MMHATTokenIdentifier];
 }
 
 - (NSString *)appID {
     NSString *appID = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
     return appID;
+}
+
+- (NSString *)deviceID {
+    return [[UIDevice currentDevice] identifierForVendor];
 }
 
 @end
