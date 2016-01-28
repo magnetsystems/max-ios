@@ -701,11 +701,11 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 }
 
 - (NSString *)CATTokenIdentifier {
-    return [NSString stringWithFormat:@"%@.%@.%@", [self appID],[self clientID], [self deviceID], MMCATTokenIdentifier];
+    return [NSString stringWithFormat:@"%@.%@.%@.%@", [self appID],[self clientID], [self deviceID], MMCATTokenIdentifier];
 }
 
 - (NSString *)HATTokenIdentifier {
-    return [NSString stringWithFormat:@"%@.%@", [self appID], [self deviceID], MMHATTokenIdentifier];
+    return [NSString stringWithFormat:@"%@.%@.%@", [self appID], [self deviceID], MMHATTokenIdentifier];
 }
 
 - (NSString *)appID {
