@@ -714,7 +714,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 }
 
 - (NSString *)deviceID {
-    return [[UIDevice currentDevice] identifierForVendor];
+    return [[UIDevice currentDevice] identifierForVendor].UUIDString;
 }
 
 @end
