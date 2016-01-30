@@ -395,6 +395,11 @@ public extension MMUser {
         NSUserDefaults.standardUserDefaults().removeObjectForKey(SAVED_OBJECT_KEY)
     }
     
+    static public func savedUser() -> MMUser? {
+        
+    return retrieveSavedUser()
+    }
+    
     static private func retrieveSavedUser() -> MMUser? {
         guard let data = NSUserDefaults.standardUserDefaults().objectForKey(SAVED_OBJECT_KEY) as? NSData where MMCoreConfiguration.serviceAdapter.hasAuthToken() == true else {
             self.deleteSavedUser()
