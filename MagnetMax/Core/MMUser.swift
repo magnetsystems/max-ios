@@ -23,18 +23,10 @@ import Foundation
     
 }
 
-public enum LoginStatus {
+public enum SessionStatus {
     case NotLoggedIn
     case LoggedIn
-    case CanRetrieveCredential
-}
-
-private struct HATTokenRefreshStatus : OptionSetType {
-    let rawValue: Int
-    
-    static let None         = HATTokenRefreshStatus(rawValue: 0)
-    static let HasRefreshed  = HATTokenRefreshStatus(rawValue: 1 << 0)
-    static let WaitingForRefresh = HATTokenRefreshStatus(rawValue: 1 << 1)
+    case CanResume
 }
 
 public extension MMUser {
@@ -50,9 +42,18 @@ public extension MMUser {
         }
     }
     
-    static private var loginWithSavedCredentialCompletionBlocks : [((error : NSError?) -> Void)] = [];
+    private struct HATTokenRefreshStatus : OptionSetType {
+        let rawValue: Int
+        
+        static let None         = HATTokenRefreshStatus(rawValue: 0)
+        static let HasRefreshed  = HATTokenRefreshStatus(rawValue: 1 << 0)
+        static let WaitingForRefresh = HATTokenRefreshStatus(rawValue: 1 << 1)
+    }
+    
+    static private var resumeSessionCompletionBlocks : [((error : NSError?) -> Void)] = [];
     static private let SAVED_OBJECT_KEY = "com.magnet.user.current"
     static private var tokenRefreshStatus : HATTokenRefreshStatus = .None
+    
     @nonobjc static public var delegate : MMUserDelegate.Type?
     
     /**
@@ -74,11 +75,11 @@ public extension MMUser {
     }
 
     /**
-     Logs in as a MMuser from saved credential.
+     Logs in as a MMuser from saved Token.
      - success: A block object to be executed when the login finishes successfully. This block has no return value and takes no arguments.
      - failure: A block object to be executed when the login finishes with an error. This block has no return value and takes one argument: the error object.
      */
-    static public func loginWithSavedCredential(success: (() -> Void)?, failure: ((error: NSError) -> Void)?) {
+    static public func resumeSession(success: (() -> Void)?, failure: ((error: NSError) -> Void)?) {
 
             let completion : ((error : NSError?) -> Void) = { error in
                 guard let e = error else {
@@ -90,7 +91,7 @@ public extension MMUser {
                 failure?(error: e)
             }
         
-        if self.userLoggedInStatus() == .NotLoggedIn {
+        if self.sessionStatus() == .NotLoggedIn {
             let error = NSError.init(domain:"com.magnet.mms.no.user", code: 400, userInfo: nil)
             completion(error: error)
             
@@ -101,34 +102,34 @@ public extension MMUser {
             return
         }
         
-        loginWithSavedCredentialCompletionBlocks.append(completion)
+        resumeSessionCompletionBlocks.append(completion)
         
         tokenRefreshStatus = tokenRefreshStatus.union(.WaitingForRefresh)
-        if tokenRefreshStatus.contains(.HasRefreshed) && loginWithSavedCredentialCompletionBlocks.count == 1 {
-            loginWithSavedCredential()
+        if tokenRefreshStatus.contains(.HasRefreshed) && resumeSessionCompletionBlocks.count == 1 {
+            resumeSession()
         }
     }
     
-    static private func loginWithSavedCredential() {
+    static private func resumeSession() {
         if let user = retrieveSavedUser() {
             updateCurrentUser(user, rememberMe: true)
             //update current user
             if let _ = self.delegate {
                 handleCompletion({
                     tokenRefreshStatus = .None
-                    for i in (0..<loginWithSavedCredentialCompletionBlocks.count).reverse() {
-                        let completion = loginWithSavedCredentialCompletionBlocks[i]
+                    for i in (0..<resumeSessionCompletionBlocks.count).reverse() {
+                        let completion = resumeSessionCompletionBlocks[i]
                         completion(error: nil)
                     }
-                    loginWithSavedCredentialCompletionBlocks = []
+                    resumeSessionCompletionBlocks = []
                     
                     }, failure:{error in
                         tokenRefreshStatus = .None
-                        for i in (0..<loginWithSavedCredentialCompletionBlocks.count).reverse() {
-                            let completion = loginWithSavedCredentialCompletionBlocks[i]
+                        for i in (0..<resumeSessionCompletionBlocks.count).reverse() {
+                            let completion = resumeSessionCompletionBlocks[i]
                             completion(error: error)
                         }
-                        loginWithSavedCredentialCompletionBlocks = []
+                        resumeSessionCompletionBlocks = []
                         
                     }, error : nil, context: "com.magnet.login.succeeded")
             }
@@ -207,7 +208,7 @@ public extension MMUser {
     @objc static private func refreshUser() {
         tokenRefreshStatus = tokenRefreshStatus.union(.HasRefreshed)
         if tokenRefreshStatus.contains(.WaitingForRefresh) {
-            loginWithSavedCredential()
+            resumeSession()
         }
     }
     
@@ -281,11 +282,11 @@ public extension MMUser {
      
      - Returns: Whether a user is logged in or not or is a user can be retrieved from saved credential
      */
-    static public func userLoggedInStatus() -> LoginStatus {
+    static public func sessionStatus() -> SessionStatus {
         if self.currentUser() != nil {
             return .LoggedIn
         } else if self.retrieveSavedUser() != nil {
-            return .CanRetrieveCredential
+            return .CanResume
         } else {
             return .NotLoggedIn
         }

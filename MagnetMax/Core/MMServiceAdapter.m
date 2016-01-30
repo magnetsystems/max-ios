@@ -205,6 +205,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
             [AFOAuthCredential storeCredential:credential withIdentifier:[serviceAdapter CATTokenIdentifier]];
         } failure:^(NSError *error) {
             [AFOAuthCredential deleteCredentialWithIdentifier:[serviceAdapter CATTokenIdentifier]];
+            [AFOAuthCredential deleteCredentialWithIdentifier:[serviceAdapter HATTokenIdentifier]];
         }];
     } else {
         serviceAdapter.CATToken = savedCATToken.accessToken;
@@ -229,7 +230,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
                         
                         [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidRestoreHATTokenNotification object:self userInfo:nil];
                         
-                        [MMUser loginWithSavedCredential:^{
+                        [MMUser resumeSession:^{
                             serviceAdapter.username = MMUser.currentUser.userName;
                             [serviceAdapter registerCurrentDeviceWithSuccess:nil failure:nil];
                         } failure:nil];
@@ -712,16 +713,20 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 }
 
 - (NSString *)CATTokenIdentifier {
-    return [NSString stringWithFormat:@"%@.%@", [self appID], MMCATTokenIdentifier];
+    return [NSString stringWithFormat:@"%@.%@.%@.%@", [self appID],[self clientID], [self deviceID], MMCATTokenIdentifier];
 }
 
 - (NSString *)HATTokenIdentifier {
-    return [NSString stringWithFormat:@"%@.%@", [self appID], MMHATTokenIdentifier];
+    return [NSString stringWithFormat:@"%@.%@.%@", [self appID], [self deviceID], MMHATTokenIdentifier];
 }
 
 - (NSString *)appID {
     NSString *appID = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
     return appID;
+}
+
+- (NSString *)deviceID {
+    return [[UIDevice currentDevice] identifierForVendor].UUIDString;
 }
 
 @end
