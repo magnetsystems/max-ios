@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name               = 'MagnetMax'
-  s.version            =  '2.3.3'
+  s.version            =  '2.4.0'
   s.license            =  { :type => 'Apache 2.0' }
   s.summary            =  'The first fully realized open mobile architecture created specifically for developing and deploying mobile-first enterprise applications.'
   s.homepage           =  'https://www.magnet.com/magnet-max/'
@@ -17,8 +17,8 @@ Pod::Spec.new do |s|
 
   s.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libxml2', 'ENABLE_BITCODE'=>'NO', 'FRAMEWORK_SEARCH_PATHS' => '$(inherited) $(SRCROOT)' }
 
-  s.dependency 'MMX', '~> 2.3'
-  s.dependency 'MagnetMaxCore', '~> 2.3'
+  s.dependency 'MMX', '~> 2.4'
+  s.dependency 'MagnetMaxCore', '~> 2.4'
 
   s.ios.deployment_target = '8.0'
 end
