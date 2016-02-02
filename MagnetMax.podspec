@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name               = 'MagnetMax'
-  s.version            =  '2.3.1'
+  s.version            =  '2.3.3'
   s.license            =  { :type => 'Apache 2.0' }
   s.summary            =  'The first fully realized open mobile architecture created specifically for developing and deploying mobile-first enterprise applications.'
   s.homepage           =  'https://www.magnet.com/magnet-max/'
