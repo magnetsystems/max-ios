@@ -15,7 +15,22 @@
  * permissions and limitations under the License.
  */
 #import "MMUpdateProfileRequest.h"
+#import "MMUser.h"
+
 @implementation MMUpdateProfileRequest
+
+- (instancetype)initWithUser:(MMUser *)user {
+    if (self = [super init]) {
+        self.firstName = user.firstName;
+        self.lastName = user.lastName;
+        self.email = user.email;
+        self.password = user.password;
+        self.extras = user.extras;
+        self.tags = user.tags;
+    }
+    
+    return self;
+}
 
 + (NSDictionary *)attributeMappings {
     NSDictionary *dictionary = @{
@@ -29,28 +44,28 @@
 
 + (NSDictionary *)listAttributeTypes {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-    }];
+                                                                                      }];
     [dictionary addEntriesFromDictionary:[super listAttributeTypes]];
     return dictionary;
 }
 
 + (NSDictionary *)mapAttributeTypes {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-    }];
+                                                                                      }];
     [dictionary addEntriesFromDictionary:[super mapAttributeTypes]];
     return dictionary;
 }
 
 + (NSDictionary *)enumAttributeTypes {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-    }];
+                                                                                      }];
     [dictionary addEntriesFromDictionary:[super enumAttributeTypes]];
     return dictionary;
 }
 
 + (NSArray *)charAttributes {
     NSMutableArray *array = [NSMutableArray arrayWithArray:@[
-    ]];
+                                                             ]];
     [array addObjectsFromArray:[super charAttributes]];
     return array;
 }
