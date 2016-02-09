@@ -66,7 +66,7 @@ public extension MMUser {
     /**
      sets the avatar image for the user with file.
      */
-    public func setAvatar(file : NSURL, success: ((user: MMUser) -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
+    public func setAvatar(file : NSURL, success: (Void -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
        
     }
     
