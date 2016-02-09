@@ -72,13 +72,8 @@ public extension MMUser {
      */
     public func setAvatar(file : NSURL, success: ((url : NSURL?) -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
         dispatch_async(dispatch_get_main_queue(), {
-            let fileData : NSData? = NSData.init(contentsOfURL: file)
-            guard let data = fileData else {
-                let error = NSError.init(domain: "NO_DATA", code: 401, userInfo: nil)
-                failure?(error: error)
-                return
-            }
-            
+            let data : NSData? = NSData.init(contentsOfURL: file)
+
             self.setAvatarData(data, success: success, failure: failure)
         })
     }
@@ -86,13 +81,23 @@ public extension MMUser {
     /**
      sets the avatar image for the user with data.
      */
-    public func setAvatarData(data : NSData, success: ((url : NSURL?) -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
-        let attachment = MMAttachment.init(data: data, mimeType: "image/png")
+    public func setAvatarData(data : NSData?, success: ((url : NSURL?) -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
+        guard let imageData = data where imageData.length > 0 else {
+            let userInfo = [
+                NSLocalizedDescriptionKey: NSLocalizedString("Data Empty", comment : "Data Empty"),
+                NSLocalizedFailureReasonErrorKey: NSLocalizedString("NSData cannot be nil", comment : "NSData cannot be nil"),
+            ]
+            
+            let error = NSError.init(domain: "MMErrorDomain", code: 500, userInfo: userInfo)
+            failure?(error: error)
+            
+            return
+        }
+        
+        let attachment = MMAttachment.init(data: imageData, mimeType: "image/png")
         let metaData = ["metadata_file_id" : avatarID()]
         MMAttachmentService.upload([attachment], metaData: metaData, success: {
-            if let successBlock = success {
-                successBlock(url: self.avatarURL())
-            }
+                success?(url: self.avatarURL())
             }, failure:failure)
     }
     
