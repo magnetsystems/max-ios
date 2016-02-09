@@ -35,8 +35,8 @@ import MMX
             - clientID: The clientID to be used.
             - clientSecret: The clientSecret to be used.
      */
-    static public func setClientID(clientID: String, clientSecret: String) {
-        setBaseURL(defaultBaseURL, clientID: clientID, clientSecret: clientSecret)
+    static public func configureWithClientID(clientID: String, clientSecret: String) {
+        configureWithBaseURL(defaultBaseURL, clientID: clientID, clientSecret: clientSecret)
     }
     
     /**
@@ -47,7 +47,7 @@ import MMX
             - clientID: The clientID to be used.
             - clientSecret: The clientSecret to be used.
      */
-    static public func setBaseURL(baseURL: String, clientID: String, clientSecret: String) {
+    static public func configureWithBaseURL(baseURL: String, clientID: String, clientSecret: String) {
         let dictionary = ["BaseURL": baseURL, "ClientID": clientID, "ClientSecret": clientSecret]
         let configuration = MMPropertyListConfiguration(dictionary: dictionary)
         MagnetMax.configure(configuration)
