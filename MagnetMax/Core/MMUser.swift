@@ -71,6 +71,13 @@ public extension MMUser {
     }
     
     /**
+     sets the avatar image for the user with data.
+     */
+    public func setAvatarData(data : NSData, success: (Void -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
+        
+    }
+    
+    /**
         Registers a new user.
      
         - Parameters:
