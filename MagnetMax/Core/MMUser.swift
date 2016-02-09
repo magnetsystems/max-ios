@@ -59,14 +59,14 @@ public extension MMUser {
     /**
      The unique avatar URL for the user.
      */
-    func avatarUrl() -> NSURL? {
-    return MMAttachmentService.attachmentURL(self.userID, userId: self.userID)
+    public func avatarURL() -> NSURL? {
+        return MMAttachmentService.attachmentURL(self.userID, userId: self.userID)
     }
   
     /**
      sets the avatar image for the user with file.
      */
-    func setAvatar(file : NSURL, success: ((user: MMUser) -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
+    public func setAvatar(file : NSURL, success: ((user: MMUser) -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
        
     }
     
