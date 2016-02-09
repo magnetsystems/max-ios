@@ -70,18 +70,18 @@ public extension MMUser {
     /**
      sets the avatar image for the user with file.
      */
-    public func setAvatar(file : NSURL, success: ((url : NSURL?) -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
-        dispatch_async(dispatch_get_main_queue(), {
-            let data : NSData? = NSData.init(contentsOfURL: file)
+    public func setAvatarWithURL(url : NSURL, success: ((url : NSURL?) -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
+            let data : NSData? = NSData.init(contentsOfURL: url)
 
-            self.setAvatarData(data, success: success, failure: failure)
+            self.setAvatarWithData(data, success: success, failure: failure)
         })
     }
     
     /**
      sets the avatar image for the user with data.
      */
-    public func setAvatarData(data : NSData?, success: ((url : NSURL?) -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
+    public func setAvatarWithData(data : NSData?, success: ((url : NSURL?) -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
         guard let imageData = data where imageData.length > 0 else {
             let userInfo = [
                 NSLocalizedDescriptionKey: NSLocalizedString("Data Empty", comment : "Data Empty"),
