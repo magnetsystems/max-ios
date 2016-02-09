@@ -56,25 +56,44 @@ public extension MMUser {
     
     @nonobjc static public var delegate : MMUserDelegate.Type?
     
+    private func avatarID() -> String {
+        return self.userID
+    }
+    
     /**
      The unique avatar URL for the user.
      */
     public func avatarURL() -> NSURL? {
-        return MMAttachmentService.attachmentURL(self.userID, userId: self.userID)
+        return MMAttachmentService.attachmentURL(avatarID(), userId: self.userID)
     }
-  
+    
     /**
      sets the avatar image for the user with file.
      */
-    public func setAvatar(file : NSURL, success: (Void -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
-       
+    public func setAvatar(file : NSURL, success: ((url : NSURL?) -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
+        dispatch_async(dispatch_get_main_queue(), {
+            let fileData : NSData? = NSData.init(contentsOfURL: file)
+            guard let data = fileData else {
+                let error = NSError.init(domain: "NO_DATA", code: 401, userInfo: nil)
+                failure?(error: error)
+                return
+            }
+            
+            self.setAvatarData(data, success: success, failure: failure)
+        })
     }
     
     /**
      sets the avatar image for the user with data.
      */
-    public func setAvatarData(data : NSData, success: (Void -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
-        
+    public func setAvatarData(data : NSData, success: ((url : NSURL?) -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
+        let attachment = MMAttachment.init(data: data, mimeType: "image/png")
+        let metaData = ["metadata_file_id" : avatarID()]
+        MMAttachmentService.upload([attachment], metaData: metaData, success: {
+            if let successBlock = success {
+                successBlock(url: self.avatarURL())
+            }
+            }, failure:failure)
     }
     
     /**
