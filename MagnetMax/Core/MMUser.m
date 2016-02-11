@@ -86,11 +86,11 @@
 
 #pragma mark - Overriden getters
 
-- (NSDictionary <NSString *, NSString *>*)extras {
-    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:_extras];
-    [dict removeObjectForKey:@"hasAvatar"];
-
-    return [dict copy];
-}
+//- (NSDictionary <NSString *, NSString *>*)extras {
+//    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:_extras];
+//    [dict removeObjectForKey:@"hasAvatar"];
+//
+//    return [dict copy];
+//}
 
 @end
