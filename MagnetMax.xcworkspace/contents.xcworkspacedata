@@ -300,6 +300,12 @@
             location = "group:MMUserInfoService.m">
          </FileRef>
          <FileRef
+            location = "group:MMUserProfile.h">
+         </FileRef>
+         <FileRef
+            location = "group:MMUserProfile.m">
+         </FileRef>
+         <FileRef
             location = "group:MMUserRealm.h">
          </FileRef>
          <FileRef

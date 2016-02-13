@@ -37,6 +37,7 @@
 NSString * const MMServiceAdapterDidReceiveConfigurationNotification = @"com.magnet.networking.configuration.receive";
 NSString * const MMServiceAdapterDidReceiveCATTokenNotification = @"com.magnet.networking.cattoken.receive";
 NSString * const MMServiceAdapterDidReceiveHATTokenNotification = @"com.magnet.networking.hattoken.receive";
+NSString * const MMServiceAdapterDidRestoreHATTokenNotification = @"com.magnet.networking.hattoken.restored";
 NSString * const MMServiceAdapterDidInvalidateHATTokenNotification = @"com.magnet.networking.hattoken.invalidate";
 NSString * const MMServiceAdapterDidReceiveInvalidCATTokenNotification = @"com.magnet.networking.cattoken.challenge.receive";
 NSString * const MMServiceAdapterDidReceiveAuthenticationChallengeNotification = @"com.magnet.networking.challenge.receive";
@@ -58,7 +59,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
     if (self) {
         _timeoutInterval = 60;
     }
-    
+
     return self;
 }
 
@@ -71,9 +72,9 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 @implementation MMServiceAdapter
 
 - (id)createService:(Class)serviceClass {
-    
+
     NSAssert([serviceClass isSubclassOfClass:[MMService class]], @"");
-    
+
     return [[serviceClass alloc] init];
 }
 
@@ -84,18 +85,18 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 }
 
 - (void)networkingTaskDidComplete:(NSNotification *)notification {
-    
+
     NSURLSessionTask *task = [notification object];
     NSHTTPURLResponse *response = (NSHTTPURLResponse *) task.response;
-    
+
     if (response.statusCode == 401) {
         NSURLRequest *originalRequest = task.originalRequest;
         // Invalid CAT token request
-        
+
         if ([self isCATTokenRequest:originalRequest]) {
-            
+
             self.CATToken = nil;
-            
+
             NSAssert(NO, @"An invalid set of clientID/clientSecret are used to configure MagnetMax. Please check them again.");
             [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidReceiveInvalidCATTokenNotification
                                                                 object:nil
@@ -103,14 +104,14 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
         } else if ([self isLogoutRequest:originalRequest]) {
             // Swallow
         } else {
-            
+
             self.HATToken = nil;
-            
+
             NSError *error = notification.userInfo[AFNetworkingTaskDidCompleteErrorKey];
             NSData *errorData = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
             NSError *jsonError;
             NSDictionary *errorDictionary = [[AFJSONResponseSerializer serializer] responseObjectForResponse:response data:errorData error:&jsonError];
-            
+
             // Cant use jsonError here as the response statusCode is 401
             //        if (!jsonError) {
             NSURL *authorizeUrl = [NSURL URLWithString:errorDictionary[@"authorize_uri"]];
@@ -169,8 +170,8 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
     serviceAdapter.endPoint = endpoint;
     serviceAdapter.client = client;
     serviceAdapter.currentCATTokenRequestStatus = MMCATTokenRequestStatusInProgress;
-    
-    
+
+
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     [configuration registerURLProtocolClass:[MMURLProtocol class]];
     MMHTTPSessionManager *sessionManager = [[MMHTTPSessionManager alloc] initWithBaseURL:endpoint.URL sessionConfiguration:configuration serviceAdapter: serviceAdapter];
@@ -179,7 +180,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
         sessionManager.securityPolicy = serviceAdapter.client.securityPolicy;
     }
     serviceAdapter.sessionManager = sessionManager;
-    
+
     NSURLSessionConfiguration *backgroundConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
     [backgroundConfiguration registerURLProtocolClass:[MMURLProtocol class]];
     MMHTTPSessionManager *backgroundSessionManager = [[MMHTTPSessionManager alloc] initWithBaseURL:endpoint.URL sessionConfiguration:configuration serviceAdapter: serviceAdapter];
@@ -188,18 +189,18 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
         backgroundSessionManager.securityPolicy = serviceAdapter.client.securityPolicy;
     }
     serviceAdapter.backgroundSessionManager = backgroundSessionManager;
-    
-    
+
+
     if (serviceAdapter.isSchemeHTTP) {
         [serviceAdapter.sessionManager.reachabilityManager setReachabilityStatusChangeBlock:serviceAdapter.networkReachabilityStatusBlock];
-        
+
         [serviceAdapter.sessionManager.reachabilityManager startMonitoring];
     }
-    
+
     AFOAuthCredential *savedCATToken = [AFOAuthCredential retrieveCredentialWithIdentifier:[serviceAdapter CATTokenIdentifier]];
     AFOAuthCredential *savedHATToken = [AFOAuthCredential retrieveCredentialWithIdentifier:[serviceAdapter HATTokenIdentifier]];
-    
-    if (!savedCATToken || savedCATToken.isExpired) {
+    [MMUser registerForNotifications];
+    if ((!savedCATToken || savedCATToken.isExpired)) {
         [serviceAdapter authorizeApplicationWithSuccess:^(AFOAuthCredential *credential) {
             [AFOAuthCredential storeCredential:credential withIdentifier:[serviceAdapter CATTokenIdentifier]];
         } failure:^(NSError *error) {
@@ -211,27 +212,32 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
         serviceAdapter.currentCATTokenRequestStatus = MMCATTokenRequestStatusDone;
         serviceAdapter.applicationAuthenticationError = nil;
         [serviceAdapter passAppTokenToRegisteredServices];
-        
+
         // The CAT token request returns the configuration. So, only need this call when we are using a previously saved CAT token.
         // We need to delay execution because serviceAdapter is not returned yet.
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_USEC), dispatch_get_main_queue(), ^{
-            
+
             MMConfigurationReader *reader = [[MMConfigurationReader alloc] init];
             MMCall *call = [reader getMobileConfigWithSuccess:^(NSDictionary<NSString *, NSString *> *configuration) {
                 [[NSUserDefaults standardUserDefaults] setObject:configuration forKey:kMMConfigurationKey];
                 [[NSUserDefaults standardUserDefaults] synchronize];
-                
+
                 [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidReceiveConfigurationNotification object:self userInfo:configuration];
                 if (savedHATToken) {
                     serviceAdapter.refreshToken = savedHATToken.refreshToken;
                     if (!savedHATToken.isExpired) {
                         serviceAdapter.HATToken = savedHATToken.accessToken;
+
+                        [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidRestoreHATTokenNotification object:self userInfo:nil];
+
+                            serviceAdapter.username = MMUser.savedUser.userName;
+                            [serviceAdapter registerCurrentDeviceWithSuccess:nil failure:nil];
                     }
-                    //                    [serviceAdapter passUserTokenToRegisteredServices];
+                    //[serviceAdapter passUserTokenToRegisteredServices];
                 }
             } failure:^(NSError *error) {
                 NSDictionary *configuration = [[NSUserDefaults standardUserDefaults] dictionaryForKey:kMMConfigurationKey];
-                
+
                 [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidReceiveConfigurationNotification object:self userInfo:configuration];
                 if (savedHATToken) {
                     serviceAdapter.refreshToken = savedHATToken.refreshToken;
@@ -245,16 +251,16 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
             // FIXME: Git rid of this cast!
             serviceAdapter.CATTokenOperation = (Operation *)call;
             [call executeInBackground:nil];
-            
+
         });
     }
-    
+
     return serviceAdapter;
 }
 
 - (void)registerCurrentDeviceWithSuccess:(void (^)(MMDevice *response))success
                                  failure:(void (^)(NSError *error))failure {
-    
+
     MMCall *call = [self.deviceService registerDevice:self.currentDevice authorization:nil success:^(MMDevice *response) {
         if (success) {
             success(response);
@@ -265,7 +271,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
                                                       failure(error);
                                                   }
                                               }];
-    
+
     [call executeInBackground:nil];
 }
 
@@ -293,7 +299,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
     refreshTokenRequest.scope = @"user";
     refreshTokenRequest.refresh_token = refreshToken;
     refreshTokenRequest.device_id = [MMServiceAdapter deviceUUID];
-    
+
     MMCall *operation = [self.userService renewAccessToken:refreshTokenRequest success:^(NSString *response) {
         NSError *jsonError;
         NSData *responseData = [response dataUsingEncoding:NSUTF8StringEncoding];
@@ -314,58 +320,62 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 }
 
 - (void)authorizeApplicationWithSuccess:(void (^)(AFOAuthCredential *credential))success
-                                failure:(void (^)(NSError *error))failure {
-    
-    AFHTTPRequestOperation *afOperation = [self.authManager authenticateUsingOAuthWithURLString:@"com.magnet.server/applications/session" scope:@"APPLICATION" success:nil failure:nil];
-    
-    //	// Create a NSOperationQueue here
-    self.CATTokenOperation = [self.requestOperationManager requestOperationWithRequest:afOperation.request
-                                                                               success:^(NSURLResponse *response, id responseObject) {
-                                                                                   AFOAuthCredential *credential;
-                                                                                   if (responseObject) {
-                                                                                       credential = [MMServiceAdapter credentialFromResponseObject:responseObject];
-                                                                                   }
-                                                                                   if (credential) {
-                                                                                       self.CATToken = credential.accessToken;
-                                                                                       self.currentCATTokenRequestStatus = MMCATTokenRequestStatusDone;
-                                                                                       
-                                                                                       self.applicationAuthenticationError = nil;
-                                                                                       [self passAppTokenToRegisteredServices];
-                                                                                       if (success) {
-                                                                                           success(credential);
-                                                                                       }
-                                                                                   } else {
-                                                                                       // FIXME:
-                                                                                       if (failure) {
-                                                                                           failure(nil);
-                                                                                       }
-                                                                                       self.currentCATTokenRequestStatus = MMCATTokenRequestStatusFailed;
-                                                                                   }
-                                                                                   [self registerCurrentDeviceWithSuccess:nil failure:nil];
-                                                                                   
-                                                                               } failure:^(NSURLResponse *response, NSError *error) {
-                                                                                   self.currentCATTokenRequestStatus = MMCATTokenRequestStatusFailed;
-                                                                                   self.applicationAuthenticationError = error;
-                                                                               }];
-    [self.requestOperationManager.operationQueue addOperation:self.CATTokenOperation];
+								failure:(void (^)(NSError *error))failure {
+
+	AFHTTPRequestOperation *afOperation = [self.authManager authenticateUsingOAuthWithURLString:@"com.magnet.server/applications/session" scope:@"APPLICATION" success:nil failure:nil];
+
+//	// Create a NSOperationQueue here
+	self.CATTokenOperation = [self.requestOperationManager requestOperationWithRequest:afOperation.request
+																					  success:^(NSURLResponse *response, id responseObject) {
+		AFOAuthCredential *credential;
+		if (responseObject) {
+			credential = [MMServiceAdapter credentialFromResponseObject:responseObject];
+		}
+		if (credential) {
+			self.CATToken = credential.accessToken;
+			self.currentCATTokenRequestStatus = MMCATTokenRequestStatusDone;
+            self.applicationAuthenticationError = nil;
+			[self passAppTokenToRegisteredServices];
+            if (success) {
+                success(credential);
+            }
+		} else {
+            // FIXME:
+            if (failure) {
+                failure(nil);
+            }
+			self.currentCATTokenRequestStatus = MMCATTokenRequestStatusFailed;
+		}
+                                                                                          [self registerCurrentDeviceWithSuccess:nil failure:nil];
+
+	} failure:^(NSURLResponse *response, NSError *error) {
+		self.currentCATTokenRequestStatus = MMCATTokenRequestStatusFailed;
+		self.applicationAuthenticationError = error;
+	}];
+	[self.requestOperationManager.operationQueue addOperation:self.CATTokenOperation];
+}
+
+- (BOOL)hasAuthToken {
+    AFOAuthCredential *savedHATToken = [AFOAuthCredential retrieveCredentialWithIdentifier:[self HATTokenIdentifier]];
+    return savedHATToken && !savedHATToken.isExpired;
 }
 
 + (AFOAuthCredential *)credentialFromResponseObject:(id)responseObject {
-    
+
     NSDictionary *jsonDictionary;
     if ([responseObject isKindOfClass:[NSDictionary class]]) {
         jsonDictionary = responseObject;
     } else if ([responseObject isKindOfClass:[NSData class]]) {
         NSError *error;
         jsonDictionary = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&error];
-        
+
         if (error) {
             return nil;
         }
     } else {
         return nil;
     }
-    
+
     //FIXME: Add the refresh token funtionality in after it is supported
     //	NSString *refreshToken = [responseObject valueForKey:@"refresh_token"];
     //	if (!refreshToken || [refreshToken isEqual:[NSNull null]]) {
@@ -376,14 +386,14 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
         configuration[@"mmx_app_id"] = jsonDictionary[@"mmx_app_id"];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidReceiveConfigurationNotification object:self userInfo:configuration];
-    
+
     AFOAuthCredential *credential = [AFOAuthCredential credentialWithOAuthToken:[jsonDictionary valueForKey:@"access_token"] tokenType:[jsonDictionary valueForKey:@"token_type"]];
-    
+
     //	if (refreshToken) { // refreshToken is optional in the OAuth2 spec
     //	 [credential setRefreshToken:refreshToken];
     //	}
-    
-    
+
+
     // Expiration is optional, but recommended in the OAuth2 spec. It not provide, assume distantFuture === never expires
     NSDate *expireDate = [NSDate distantFuture];
     id expiresIn = [jsonDictionary valueForKey:@"expires_in"];
@@ -392,7 +402,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
         // This is conservative.
         expireDate = [NSDate dateWithTimeIntervalSinceNow:([expiresIn doubleValue] - (5 * 60))];
     }
-    
+
     if (expireDate) {
         [credential setExpiration:expireDate];
     }
@@ -402,7 +412,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 - (MMCall *)registerUser:(MMUser *)user
                  success:(void (^)(MMUser *registeredUser))success
                  failure:(void (^)(NSError *error))failure {
-    
+
     return [self callRegisterUser:user success:success failure:failure];
 }
 
@@ -413,7 +423,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
     if(!user.userRealm) {
         user.userRealm = MMUserRealmDB;
     }
-    
+
     MMCall *call = [self.userService register:user success:^(MMUser *registeredUser) {
         if (success) {
             success(registeredUser);
@@ -423,7 +433,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
             failure(error);
         }
     }];
-    
+
     return call;
 }
 
@@ -434,7 +444,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
                    rememberMe:(BOOL)rememberMe
                       success:(void (^)(BOOL successful))success
                       failure:(void (^)(NSError *error))failure {
-    
+
     NSDictionary * params = @{@"grant_type":@"password",
                               @"username":username,
                               @"password":password,
@@ -446,7 +456,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
                                                                                if (rememberMe) {
                                                                                    [AFOAuthCredential storeCredential:credential withIdentifier:[self HATTokenIdentifier]];
                                                                                }
-                                                                               
+
                                                                                self.username = username;
                                                                                self.HATToken = credential.accessToken;
                                                                                self.refreshToken = credential.refreshToken;
@@ -462,40 +472,40 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
                                                                                    failure(error);
                                                                                }
                                                                            }];
-    
+
     NSString *correlationId = [[NSUUID UUID] UUIDString];
     //    NSDictionary *metaData = [[MMUserService class] metaData];
     //    NSString *selectorString = NSStringFromSelector(@selector(login:username:password:client_id:scope:remember_me:mMSDEVICEID:authorization:success:failure:));
     //    MMServiceMethod *method = metaData[selectorString];
-    
-    
+
+
     MMCall *call = [[MMCall alloc] init];
     call.serviceAdapter = self;
     call.callId = correlationId;
     call.underlyingOperation = operation;
-    
+
     return call;
 }
 
 - (MMCall *)logoutWithSuccess:(void (^)(BOOL response))success failure:(void (^)(NSError *error))failure {
     // Unregister device
     MMCall *call = [self.deviceService unRegisterDevice:[MMServiceAdapter deviceUUID] authorization:self.HATToken success:^(BOOL response) {
-        
+
     } failure:^(NSError *error) {
         //        NSLog(@"Failed to unregister device when logout");
     }];
     [call executeInBackground:nil];
-    
+
     // Delete the HAT token
     [AFOAuthCredential deleteCredentialWithIdentifier:[self HATTokenIdentifier]];
-    
+
     return [self.userService logoutWithSuccess:^(BOOL response) {
         // Clean up
         self.HATToken = nil;
         self.refreshToken = nil;
         [self invalidateUserTokenInRegisteredServices];
         self.username = nil;
-        
+
         if (success) {
             success(response);
         }
@@ -505,7 +515,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
         self.refreshToken = nil;
         [self invalidateUserTokenInRegisteredServices];
         self.username = nil;
-        
+
         if(failure) {
             failure(error);
         }
@@ -526,7 +536,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 }
 
 - (void)resendReliableCalls {
-    
+
     // FIXME: How to access a protocol extension from Objective-C
     // Use [MMReliableCall sortedFetchRequest]
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:[MMReliableCall entityName]];
@@ -544,14 +554,14 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 
 - (BOOL)isSchemeHTTP {
     BOOL isSchemeHTTP = NO;
-    
+
     NSString *scheme = self.endPoint.URL.scheme;
     if (MMDoesSchemeHaveHTTPPrefix(scheme)) {
         isSchemeHTTP = YES;
     } else if (MMDoesSchemeHaveWSPrefix(scheme)) {
         isSchemeHTTP = NO;
     }
-    
+
     return isSchemeHTTP;
 }
 
@@ -580,7 +590,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 
 - (NSString *)basicAuthorization {
     NSData *nsdata = [[NSString stringWithFormat:@"%@:%@",self.clientID,self.clientSecret] dataUsingEncoding:NSUTF8StringEncoding];
-    
+
     return [NSString stringWithFormat:@"Basic %@",[nsdata base64EncodedStringWithOptions:0]];
 }
 
@@ -591,16 +601,16 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
         _authManager = [[AFOAuth2Manager alloc] initWithBaseURL:self.endPoint.URL
                                                        clientID:self.clientID/*kClientID*/
                                                          secret:self.clientSecret/*kClientSecret*/];
-        
+
         [_authManager.requestSerializer setValue:[MMServiceAdapter deviceUUID] forHTTPHeaderField:@"MMS-DEVICE-ID"];
         [_authManager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-        
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnonnull"
         _authManager.operationQueue = nil;
 #pragma clang diagnostic pop
     }
-    
+
     return _authManager;
 }
 
@@ -614,7 +624,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
         }
         _requestOperationManager.securityPolicy = self.client.securityPolicy;
     }
-    
+
     return _requestOperationManager;
 }
 
@@ -622,7 +632,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
     if (!_services) {
         _services = [NSMutableDictionary dictionary];
     }
-    
+
     return _services;
 }
 
@@ -630,7 +640,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
     if(!_userService) {
         _userService = [self createService:MMUserService.class];
     }
-    
+
     return _userService;
 }
 
@@ -638,7 +648,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
     if(!_deviceService) {
         _deviceService = [self createService:MMDeviceService.class];
     }
-    
+
     return _deviceService;
 }
 
@@ -646,7 +656,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
     if(!_userInfoService) {
         _userInfoService = [self createService:MMUserInfoService.class];
     }
-    
+
     return _userInfoService;
 }
 
@@ -658,17 +668,17 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
         myDevice.pushAuthority = MMPushAuthorityTypeAPNS;
         myDevice.deviceID = [MMServiceAdapter deviceUUID];
         myDevice.label = [[UIDevice currentDevice] name];
-        
+
         _currentDevice = myDevice;
     }
-    
+
     return _currentDevice;
 }
 
 - (void)passAppTokenToRegisteredServices {
-    
+
     NSString *deviceID = [MMServiceAdapter deviceUUID];
-    
+
     NSDictionary *userInfo = @{
                                @"appID" : self.clientID,
                                @"deviceID" : deviceID,
@@ -678,9 +688,9 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 }
 
 - (void)passUserTokenToRegisteredServices {
-    
+
     NSString *deviceID = [MMServiceAdapter deviceUUID];
-    
+
     NSDictionary *userInfo = @{
                                @"userID" : self.username,
                                @"deviceID" : deviceID,
@@ -690,9 +700,9 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 }
 
 - (void)invalidateUserTokenInRegisteredServices {
-    
+
     NSString *deviceID = [MMServiceAdapter deviceUUID];
-    
+
     NSDictionary *userInfo = @{
                                @"userID" : self.username,
                                @"deviceID" : deviceID,

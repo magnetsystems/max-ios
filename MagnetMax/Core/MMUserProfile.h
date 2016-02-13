@@ -15,24 +15,13 @@
  * permissions and limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
 #import "MMModel.h"
 
-@class MMUser;
+@interface MMUserProfile : MMModel
 
-@interface MMUpdateProfileRequest : MMModel
+@property (nonatomic, copy) NSString *displayName;
 
-@property (nonatomic, copy) NSArray *tags;
-
-@property (nonatomic, copy) NSString *lastName;
-
-@property (nonatomic, copy) NSString *email;
-
-@property (nonatomic, copy) NSString *firstName;
-
-@property (nonatomic, copy) NSString *password;
-
-@property (nonatomic, copy) NSDictionary *extras;
-
-- (instancetype)initWithUser:(MMUser *)user;
+@property (nonatomic, copy) NSString *userId;
 
 @end

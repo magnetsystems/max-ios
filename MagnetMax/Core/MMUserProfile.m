@@ -14,32 +14,17 @@
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-#import "MMUpdateProfileRequest.h"
-#import "MMUser.h"
 
-@implementation MMUpdateProfileRequest
+#import "MMUserProfile.h"
 
-- (instancetype)initWithUser:(MMUser *)user {
-    if (self = [super init]) {
-        self.firstName = user.firstName;
-        self.lastName = user.lastName;
-        self.email = user.email;
-        self.password = user.password.length > 0 ? user.password : nil;
-        self.extras = user.extras;
-        self.tags = user.tags;
-    }
-    
-    return self;
-}
-
+@implementation MMUserProfile
 
 + (NSDictionary *)attributeMappings {
     NSDictionary *dictionary = @{
-                                 @"extras": @"userAccountData",
-                                 };
+    };
     NSMutableDictionary *attributeMappings = [[super attributeMappings] mutableCopy];
     [attributeMappings addEntriesFromDictionary:dictionary];
-    
+
     return attributeMappings;
 }
 
