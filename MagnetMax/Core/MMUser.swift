@@ -109,7 +109,14 @@ public extension MMUser {
             let updateProfileRequest = MMUpdateProfileRequest(user: MMUser.currentUser())
             updateProfileRequest.password = nil
             updateProfileRequest.extras["hasAvatar"] = "true"
+            self.extras["hasAvatar"] = "true"
             MMUser.updateProfile(updateProfileRequest, success: { user in
+                // http://stackoverflow.com/questions/26260401/nsurlcache-does-not-clear-stored-responses-in-ios8
+//                if let avatarURL = self.avatarURL() {
+//                    let request = NSURLRequest(URL: avatarURL)
+//                    NSURLCache.sharedURLCache().removeCachedResponseForRequest(request)
+//                }
+                NSURLCache.sharedURLCache().removeAllCachedResponses()
                 success?(url: self.avatarURL())
             }, failure:failure)
         }, failure:failure)
