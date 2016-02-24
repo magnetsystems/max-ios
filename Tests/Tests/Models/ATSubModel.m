@@ -20,7 +20,9 @@
 
 + (NSDictionary *)attributeMappings {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-    }];
+                                                                                      @"intAttribute": @"intAttribute",
+                                                                                      @"stringAttribute": @"stringAttribute",
+                                                                                      }];
     [dictionary addEntriesFromDictionary:[super attributeMappings]];
     return dictionary;
 }

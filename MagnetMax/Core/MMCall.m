@@ -21,7 +21,6 @@
 #import "MMServiceMethod.h"
 #import "MMServiceAdapter_Private.h"
 #import "MMValueTransformer.h"
-#import "MTLJSONAdapter.h"
 #import "MMRequestOperationManager.h"
 
 @implementation MMCall
@@ -239,7 +238,8 @@
                                     Class clazz = self.serviceMethod.returnTypeClass;
                                     res = [[MMValueTransformer listTransformerForType:self.serviceMethod.returnComponentType clazz:clazz] transformedValue:res];
                                 } else if ([res isKindOfClass:[NSDictionary class]]) {
-                                    res = [MTLJSONAdapter modelOfClass:self.serviceMethod.returnTypeClass fromJSONDictionary:res error:&hydrationError];
+                                    res = [[MMValueTransformer resourceNodeTransformerForClass:self.serviceMethod.returnTypeClass] transformedValue:res];
+//                                    res = [MTLJSONAdapter modelOfClass:self.serviceMethod.returnTypeClass fromJSONDictionary:res error:&hydrationError];
                                 }
                                 if (!hydrationError) {
                                     successBlockToExecute(res);

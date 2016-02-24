@@ -21,7 +21,14 @@
 + (NSDictionary *)attributeMappings {
     NSDictionary *dictionary = @{
                                  @"userID": @"userIdentifier",
+                                 @"userName": @"userName",
+                                 @"firstName": @"firstName",
+                                 @"lastName": @"lastName",
+                                 @"email": @"email",
+                                 @"roles": @"roles",
+                                 @"userRealm": @"userRealm",
                                  @"extras": @"userAccountData",
+                                 @"tags": @"tags",
                                  };
     NSMutableDictionary *attributeMappings = [[super attributeMappings] mutableCopy];
     [attributeMappings addEntriesFromDictionary:dictionary];

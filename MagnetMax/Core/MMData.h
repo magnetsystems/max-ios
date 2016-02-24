@@ -15,9 +15,9 @@
  * permissions and limitations under the License.
  */
 
-@import Mantle;
+#import "MMModel.h"
 
-@interface MMData : MTLModel
+@interface MMData : MMModel
 
 /**
 * The name associated with this data object.

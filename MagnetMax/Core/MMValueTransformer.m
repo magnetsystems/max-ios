@@ -15,14 +15,17 @@
  * permissions and limitations under the License.
  */
  
-#import <Mantle/Mantle.h>
 #import "MMValueTransformer.h"
+#import "MTLValueTransformer.h"
 #import "MMEnumAttributeContainer.h"
 #import "MMUtilities.h"
 //#import "MMResourceNode.h"
 //#import "MMData.h"
 //#import "MMAssert.h"
-@import Mantle;
+#import "MMModel.h"
+//@import Mantle;
+#import "NSValueTransformer+MTLPredefinedTransformerAdditions.h"
+#import "NSDictionary+MTLJSONKeyPath.h"
 
 @interface MMValueTransformer ()
 
@@ -113,7 +116,95 @@
 
 
 + (instancetype)resourceNodeTransformerForClass:(Class)clazz {
-    return (MMValueTransformer *) [MTLJSONAdapter dictionaryTransformerWithModelClass:clazz];
+//    return (MMValueTransformer *) [MTLJSONAdapter dictionaryTransformerWithModelClass:clazz];
+    // Cast to id is required to suppress the warning
+    
+    id transformer = [MTLValueTransformer transformerUsingForwardBlock:^id(NSDictionary *JSONDictionary, BOOL __unused *success, NSError __unused **error) {
+        
+        NSMutableDictionary *dictionaryValue = [[NSMutableDictionary alloc] initWithCapacity:JSONDictionary.count];
+        
+        for (NSString *propertyKey in [clazz propertyKeys]) {
+            id JSONKeyPaths = [clazz attributeMappings][propertyKey];
+            
+            if (JSONKeyPaths == nil) continue;
+            
+            id value;
+            
+            if ([JSONKeyPaths isKindOfClass:NSArray.class]) {
+                NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+                
+                for (NSString *keyPath in JSONKeyPaths) {
+                    BOOL success = NO;
+                    id value = [JSONDictionary mtl_valueForJSONKeyPath:keyPath success:&success error:error];
+                    
+                    if (!success) return nil;
+                    
+                    if (value != nil) dictionary[keyPath] = value;
+                }
+                
+                value = dictionary;
+            } else {
+                BOOL success = NO;
+                value = [JSONDictionary mtl_valueForJSONKeyPath:JSONKeyPaths success:&success error:error];
+                
+                if (!success) return nil;
+            }
+            
+            if (value == nil) continue;
+            
+            @try {
+                NSValueTransformer *transformer = [clazz JSONTransformerForKey:propertyKey];
+                if (transformer != nil) {
+                    // Map NSNull -> nil for the transformer, and then back for the
+                    // dictionary we're going to insert into.
+                    if ([value isEqual:NSNull.null]) value = nil;
+                    
+                    if ([transformer respondsToSelector:@selector(transformedValue:success:error:)]) {
+                        id<MTLTransformerErrorHandling> errorHandlingTransformer = (id)transformer;
+                        
+                        BOOL success = YES;
+                        value = [errorHandlingTransformer transformedValue:value success:&success error:error];
+                        
+                        if (!success) return nil;
+                    } else {
+                        value = [transformer transformedValue:value];
+                    }
+                    
+                    if (value == nil) value = NSNull.null;
+                }
+                
+                dictionaryValue[propertyKey] = value;
+            } @catch (NSException *ex) {
+                NSLog(@"*** Caught exception %@ parsing JSON key path \"%@\" from: %@", ex, JSONKeyPaths, JSONDictionary);
+                
+                // Fail fast in Debug builds.
+#if DEBUG
+                @throw ex;
+#else
+//                if (error != NULL) {
+//                    NSDictionary *userInfo = @{
+//                                               NSLocalizedDescriptionKey: ex.description,
+//                                               NSLocalizedFailureReasonErrorKey: ex.reason,
+//                                               MTLJSONAdapterThrownExceptionErrorKey: ex
+//                                               };
+//                    
+//                    *error = [NSError errorWithDomain:MTLJSONAdapterErrorDomain code:MTLJSONAdapterErrorExceptionThrown userInfo:userInfo];
+//                }
+                
+                return nil;
+#endif
+            }
+        }
+        
+        id model = [clazz modelWithDictionary:dictionaryValue error:error];
+        
+//        return [model validate:error] ? model : nil;
+        return model;
+        
+    } reverseBlock:^id (MMModel *model, BOOL __unused *success, NSError __unused **error) {
+        return [model toDictionary];
+    }];
+    return transformer;
 }
 
 + (instancetype)listTransformerForType:(MMServiceIOType)type clazz:(Class)clazz {

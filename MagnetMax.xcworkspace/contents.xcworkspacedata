@@ -42,6 +42,24 @@
             location = "group:Internal"
             name = "Internal">
             <FileRef
+               location = "group:NSDictionary+MTLJSONKeyPath.h">
+            </FileRef>
+            <FileRef
+               location = "group:NSDictionary+MTLJSONKeyPath.m">
+            </FileRef>
+            <FileRef
+               location = "group:MTLTransformerErrorHandling.h">
+            </FileRef>
+            <FileRef
+               location = "group:MTLTransformerErrorHandling.m">
+            </FileRef>
+            <FileRef
+               location = "group:NSValueTransformer+MTLPredefinedTransformerAdditions.h">
+            </FileRef>
+            <FileRef
+               location = "group:NSValueTransformer+MTLPredefinedTransformerAdditions.m">
+            </FileRef>
+            <FileRef
                location = "group:MMRefreshTokenRequest.h">
             </FileRef>
             <FileRef
@@ -96,6 +114,12 @@
             </FileRef>
             <FileRef
                location = "group:MMUtilities.m">
+            </FileRef>
+            <FileRef
+               location = "group:MTLValueTransformer.h">
+            </FileRef>
+            <FileRef
+               location = "group:MTLValueTransformer.m">
             </FileRef>
          </Group>
          <FileRef

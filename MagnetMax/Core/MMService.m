@@ -19,7 +19,6 @@
 #import "MMServiceAdapter_Private.h"
 #import "MMServiceMethod.h"
 #import "MMRestHandler.h"
-#import "MMValueTransformer.h"
 #import "MMRequestOperationManager.h"
 #import "MMModel.h"
 #import <AFNetworking/AFURLResponseSerialization.h>
