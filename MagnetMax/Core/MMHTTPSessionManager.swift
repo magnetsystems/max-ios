@@ -79,6 +79,7 @@ public class MMHTTPSessionManager: AFHTTPSessionManager {
                                         originalTask.resume()
                                     }, failure: { error in
                                         print(error)
+                                        originalCompletionHandler?(response, nil, error)
                                     })
                                 } else {
                                     originalCompletionHandler?(response, responseObject, error)
