@@ -85,6 +85,16 @@
     return self;
 }
 
+#pragma mark - Equality
+
+- (BOOL)isEqual:(MMUser *)object {
+    return [self hash] == [self hash];
+}
+
+- (NSUInteger)hash {
+    return [self.userID hash];
+}
+
 #pragma mark - Overriden getters
 
 //- (NSDictionary <NSString *, NSString *>*)extras {
