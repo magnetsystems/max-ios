@@ -5,8 +5,7 @@ Pod::Spec.new do |s|
   s.summary            =  'The first fully realized open mobile architecture created specifically for developing and deploying mobile-first enterprise applications.'
   s.homepage           =  'https://www.magnet.com/magnet-max/'
   s.author             =  { 'Magnet Systems, Inc.' => 'info@magnet.com' }
-  # s.source             =  { :git => 'https://github.com/magnetsystems/max-ios.git', :tag => "tag-release-#{s.version}" }
-  s.source             =  { :git => 'https://github.com/magnetsystems/max-ios.git', :branch => "develop" }
+  s.source             =  { :git => 'https://github.com/magnetsystems/max-ios.git', :tag => "tag-release-#{s.version}" }
 
   s.platform = :ios
   s.ios.deployment_target = '8.0'
@@ -17,8 +16,8 @@ Pod::Spec.new do |s|
 
   s.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libxml2', 'ENABLE_BITCODE'=>'NO', 'FRAMEWORK_SEARCH_PATHS' => '$(inherited) $(SRCROOT)' }
 
-  s.dependency 'MMX', '~> 2.5.2'
-  s.dependency 'MagnetMaxCore', '~> 2.5.2'
+  s.dependency 'MMX', '~> 2.5'
+  s.dependency 'MagnetMaxCore', '~> 2.5'
 
   s.ios.deployment_target = '8.0'
 end
