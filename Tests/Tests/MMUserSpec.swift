@@ -90,7 +90,6 @@ class MMUserSpec : QuickSpec {
             }
             
             it("should be able to login multiple times") {
-                MagnetMax.configure(ATServiceAdapterHelper.defaultConfiguration())
                 let credential = NSURLCredential(user: user.userName, password: user.password, persistence: .None)
                 let credential2 = NSURLCredential(user: user2.userName, password: user2.password, persistence: .None)
                 var didFinish : Bool = false
