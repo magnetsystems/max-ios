@@ -96,7 +96,7 @@ import MMX
     
     /// Registers MMXPayloads for MMXPayloads in MMXMessage.
     static private func registerMMXPayloadClasses() {
-        MMXPayloadRegister.registerClassesForPayloads([MMXPollResult.self, MMXPollAnswer.self])
+        MMXPayloadRegister.registerClassesForPayloads([MMXPollIdentifier.self, MMXPollAnswer.self])
     }
     
     /**
