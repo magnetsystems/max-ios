@@ -1,6 +1,6 @@
 source 'https://github.com/CocoaPods/Specs'
-source 'https://github.com/magnetsystems/Specs'
 source 'https://github.com/magnetsystems/iOS-Distribution'
+source 'https://github.com/magnetsystems/Specs'
 
 xcodeproj 'MagnetMax Tests'
 workspace '../MagnetMax'
@@ -9,7 +9,7 @@ inhibit_all_warnings!
 def import_pods
   use_frameworks!
   pod 'Quick'
-  pod 'Nimble'
+  pod 'Nimble', '~> 4.0' 
 #  pod 'Quick', '~> 0.6.0'
 #  pod 'Nimble', '2.0.0-rc.3'
   pod 'Kiwi', '~> 2.3'
