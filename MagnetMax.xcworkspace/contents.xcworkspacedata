@@ -102,6 +102,9 @@
             location = "group:MagnetMaxCore.h">
          </FileRef>
          <FileRef
+            location = "group:MMAsyncBlockOperation.swift">
+         </FileRef>
+         <FileRef
             location = "group:MMAsynchronousOperation.h">
          </FileRef>
          <FileRef
