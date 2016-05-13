@@ -17,11 +17,22 @@
 
 #import <Foundation/Foundation.h>
 
+@class MMAsynchronousOperation;
+
+@protocol MMAsynchronousOperationDelegate  <NSObject>
+
+- (void)operationDidBeginExecuting:(MMAsynchronousOperation *)operation;
+
+@end
 
 @interface MMAsynchronousOperation : NSOperation
+
+@property(weak) id<MMAsynchronousOperationDelegate>delegate;
 
 - (void)execute;
 
 - (void)finish;
+
+- (void)cancel;
 
 @end

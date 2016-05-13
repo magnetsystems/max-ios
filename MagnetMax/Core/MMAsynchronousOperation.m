@@ -52,8 +52,14 @@
 }
 
 - (void)execute {
-    // FIXME: Throw exception
-    // Subclasses should override this method!
+    if (self.delegate) {
+        [self.delegate operationDidBeginExecuting:self];
+    }
+}
+
+- (void)cancel {
+    [super cancel];
+    [self finish];
 }
 
 - (void)finish {
